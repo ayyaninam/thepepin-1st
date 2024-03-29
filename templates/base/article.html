@@ -1,0 +1,77 @@
+{% extends "base/base.html" %}
+{% load customfilters %}
+
+{% block content %}
+<div class="articles_with_side_bar">
+
+<div class="article__encloser my-5 mx-5">
+    <small class="d-block">{{article.article_type}}</small>
+    <small class="d-block"><b>{{article.institution}}</b></small>
+    <h2 class="headline__art_en">{{article.title}}</h2>
+    <div class="description">
+        <hr>
+        <p>{{article.description}}</p>
+    </div>
+    <hr>
+    <div class="all__minor__details">
+        <small class="d-block my-2">
+            {% if article.keywords.all %}
+            <b>Keywords:</b>
+            <span>
+                &nbsp;
+                {% for keyword in article.keywords.all %}
+                {{ keyword.name }} •
+                {% endfor %}
+            </span>
+        </small>
+        {% endif %}
+
+        {% if article.published_date %}
+        <small class="d-block my-2"><b>Published on:</b> {{article.published_date}}</small>
+        {% endif %}
+        {% if article.disclaimer %}
+        <small class="d-block my-2"><b>Disclaimer:</b> {{article.disclaimer}}</small>
+        {% endif %}
+
+        {% if article.copyright %}
+        <small class="d-block my-2"><b>Copyright:</b> {{article.copyright}}</small>
+        {% endif %}
+
+    </div>
+
+    <div class="resources">
+        <hr>
+        <h1>Available Resources</h1>
+        <ul>
+            {% if article.resources.all %}
+            {% for document in article.resources.all %}
+        <div class="my-4">
+            <a href="{{ document.file.url }}" class="btn btn-outline-dark"><i class="fa fa-download"></i> {{ document.get__name }}</a>
+        </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-danger">No Resource Found!</p>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+<div class="latest_articles my-5">
+    <h1>Latest Articles</h1>
+    {% for article in latest_articles %}
+    <hr>
+
+    <a href="{% url 'article_view' article.id %}" class="cursor__pointer no_underline text-dark">
+        <div class="sidebar_articles">
+        <small class="d-block">{{article.article_type}} | {{article.published_date}}</small>
+          <small>{{article.title | slice:"0:50"}}</small>
+        </div>
+
+    </a>
+    {% endfor %}
+
+</div>
+</div>
+
+
+
+{% endblock content %}

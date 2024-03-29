@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+{% block content %}
+<div class="main_all_articles w-75 mx-auto my-5">
+
+
+<span class="fw-bold fs-2">{{all_articles|length}} Article(s)</span>
+<div class="all_filters mt-3">
+    <div class="left_filters">
+        <a class="mx-4 cursor__pointer no_underline">Most Recent</a>
+        <a class="mx-4 cursor__pointer no_underline">Most viewed</a>
+    </div>
+</div>
+
+<div class="all_articles_container my-5">
+    {% for article in all_articles %}
+    <a class="article_card text-dark no_underline" href="{% url 'article_view' article.id %}">
+
+        <small class="my-0 text-muted">{{article.article_type}}</small>
+        <small class="text-muted published_date_of_article">Published on: {{article.published_date}}</small>
+        <span class="h4 art__headline">{{article.title | slice:"0:100" }}</span>
+        <small class="article_keywords text-muted">
+            {% for keyword in article.keywords.all|slice:":6" %}
+                {{ keyword.name }} •
+            {% endfor %}
+        </small>
+        <small class="my-0 text-muted">{{article.institution}}</small>
+    </a>
+    {% endfor %}
+</div>
+</div>
+{% endblock content %}

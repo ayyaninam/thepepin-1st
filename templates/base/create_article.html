@@ -1,0 +1,82 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<script src="{% static 'base/js/tinymce.js'%}" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: '#description',
+        height:656,
+        width:"100%",
+    });
+</script>
+
+<!-- create_article.html -->
+<form action="{% url 'create_article_view' %}" class="main__create_article__form" method="POST">
+    <!-- title  -->
+    <div class="single__target">
+        <input type="text" class="form-control" id="title" placeholder="Title">
+    </div>
+    <!-- end title  -->
+
+    <!-- article type -->
+
+    <div class="single__target">
+        <select class="form-select" aria-placeholder="Select the Institute" aria-label="Select the Institute" id="article_type" name="article_type">
+            <option class="d-none" selected>Select the Article Type:</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+
+    <!-- end article type -->
+
+    <div class="single__target">
+        <textarea name="description" placeholder="Add Description" class="w-100 form-control" id="description"
+            rows="20"></textarea>
+    </div>
+
+    <div class="single__target">
+        <textarea name="disclaimer" placeholder="Add Disclaimer" class="form-control" id="disclaimer"
+            rows="5"></textarea>
+    </div>
+
+    <div class="single__target">
+        <textarea name="copyright" placeholder="Add Copyright" class="form-control" id="copyright" rows="5"></textarea>
+    </div>
+
+
+    <div class="single__target">
+        <select class="form-select" aria-placeholder="Select the Institute" aria-label="Select the Institute" id="institute" name="institute">
+            <option class="d-none" selected>Select the Institute:</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+
+
+    <div class="single__target multi-search-filter" onclick="Array.from(this.children).find(n=>n.tagName==='INPUT').focus()">
+        <input placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
+    </div>
+</form>
+<script>
+    function multiSearchKeyup(inputElement) {
+    if(event.keyCode === 13) {
+        inputElement.parentNode
+            .insertBefore(createFilterItem(inputElement.value), inputElement)
+            ;
+        inputElement.value = "";
+    }
+    function createFilterItem(text) {
+        const item = document.createElement("div");
+        item.setAttribute("class", "multi-search-item");
+        const span = `<span>${text}</span>`;
+        const close = `<div class="fa fa-close" onclick="this.parentNode.remove()"></div>`;
+        item.innerHTML = span+close;
+        return item;
+    }
+}
+</script>
+{% endblock content %}

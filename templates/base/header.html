@@ -1,0 +1,25 @@
+{% load static %}
+<nav class="base__navbar">
+<div class="left">
+    <a href="{% url 'homepage_view' %}">
+    <img class="logo_image" src="{% static 'base/images/pepin_logo.png' %}" alt="">
+</a>
+</div>
+<div class="middle">
+    <a href="">HELLO</a>
+    <a href="">HELLO</a>
+    <a href="">HELLO</a>
+    <a href="">HELLO</a>
+</div>
+<div class="right">
+    
+    {% if user.is_authenticated %}
+        <!-- User is logged in -->
+        <a href="{% url 'logout_view' %}" class="bttn green_btn no_underline text-dark">Logout</a>
+    {% else %}
+        <!-- User is not logged in -->
+        <a href="{% url 'login_view' %}" class="bttn lblue_btn no_underline text-dark">Login</a>
+        <a href="{% url 'signup_view' %}" class="bttn green_btn no_underline text-dark">Signup</a>
+    {% endif %}
+</div>
+</nav>
