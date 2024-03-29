@@ -78,6 +78,7 @@ class Affiliation(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='articleUser', blank=False)
     article_type = models.ForeignKey('ArticleType', on_delete=models.CASCADE, related_name='articlestype', blank=True)
     resources = models.ManyToManyField('Resources', related_name='articles', blank=True)
     description = models.TextField()

@@ -6,6 +6,15 @@ from django.contrib.auth import logout, authenticate
 from django.contrib import messages
 from django.http import Http404
 from base.models import * 
+from django.urls import reverse
+
+
+def login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('login_view'))  # Redirect to your login page
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 def homepage_view(request):
 
@@ -90,7 +99,6 @@ def logout_view(request):
     return redirect('homepage_view')
 
 
-
+@login_required
 def create_article_view(request):
-
     return render(request, 'base/create_article.html')
