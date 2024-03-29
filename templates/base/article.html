@@ -10,7 +10,9 @@
     <h2 class="headline__art_en">{{article.title}}</h2>
     <div class="description">
         <hr>
+        {% autoescape off %}
         <p>{{article.description}}</p>
+        {% endautoescape %}
     </div>
     <hr>
     <div class="all__minor__details">
@@ -41,7 +43,7 @@
 
     <div class="resources">
         <hr>
-        <h1>Available Resources</h1>
+        <h1 class="">Available Resources</h1>
         <ul>
             {% if article.resources.all %}
             {% for document in article.resources.all %}
@@ -56,14 +58,14 @@
     </div>
 </div>
 <div class="latest_articles my-5">
-    <h1>Latest Articles</h1>
+    <h1 class="fw-bold text-success">Latest Articles</h1>
     {% for article in latest_articles %}
     <hr>
 
     <a href="{% url 'article_view' article.id %}" class="cursor__pointer no_underline text-dark">
         <div class="sidebar_articles">
-        <small class="d-block">{{article.article_type}} | {{article.published_date}}</small>
-          <small>{{article.title | slice:"0:50"}}</small>
+        <small class="d-block text-muted">{{article.article_type}} | {{article.published_date}}</small>
+          <small class="fw-semibold">{{article.title | slice:"0:50"}}</small>
         </div>
 
     </a>
