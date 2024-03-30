@@ -12,14 +12,28 @@
 </script>
 
 <!-- create_article.html -->
-<form action="{% url 'create_article_view' %}" class="main__create_article__form" method="POST">
+
+{% if messages %}
+<ul class="errorlist">
+    {% for message in messages %}
+    <button class="rounded btn btn-danger mx-auto d-flex">{{ message }}</button>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form action="{% url 'create_article_view' %}" class="needs-validation main__create_article__form"
+    id="article__creation__form" method="POST" onkeydown="return event.key != 'Enter';">
+    {% csrf_token %}
     <!-- title  -->
     <div class="w-100">
 
-    <h1 class="fw-bold my-5 d-flex justify-content-center">Article Title, Type and Institution</h1>
+        <h1 class="fw-bold my-5 d-flex justify-content-center">Article Title, Type and Institution</h1>
 
         <div class="single__target">
-            <input type="text" class="form-control" id="title" placeholder="Title">
+            <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
         </div>
         <!-- end title  -->
 
@@ -27,7 +41,7 @@
 
         <div class="single__target">
             <input class="form-control" list="article_type_datalist" id="article_type"
-                placeholder="Select the Article Type..." name="article_type">
+                placeholder="Select the Article Type..." name="article_type" required>
             <datalist id="article_type_datalist">
                 <option value="San Francisco">
                 <option value="New York">
@@ -43,7 +57,7 @@
         <!-- end article type -->
 
         <div class="single__target">
-            <input class="form-control" list="institute_datalist" id="institute"
+            <input required class="form-control" list="institute_datalist" id="institute"
                 placeholder="Select the Institution..." name="institute">
             <datalist id="institute_datalist">
                 <option value="San Francisco">
@@ -56,14 +70,14 @@
 
         </div>
 
-    <h1 class="fw-bold my-5 d-flex justify-content-center">Article Description</h1>
+        <h1 class="fw-bold my-5 d-flex justify-content-center">Article Description</h1>
 
         <div class="single__target">
             <textarea name="description" placeholder="Add Description" class="w-100 form-control" id="description"
                 rows="20"></textarea>
         </div>
 
-    <h1 class="fw-bold my-5 d-flex justify-content-center">Article Disclaimer and Copyright</h1>
+        <h1 class="fw-bold my-5 d-flex justify-content-center">Article Disclaimer and Copyright</h1>
 
         <div class="single__target">
             <textarea name="disclaimer" placeholder="Add Disclaimer" class="form-control" id="disclaimer"
@@ -77,15 +91,19 @@
 
 
 
-    <h1 class="fw-bold my-5 d-flex justify-content-center">Article Keywords</h1>
+        <h1 class="fw-bold my-5 d-flex justify-content-center">Article Keywords</h1>
 
 
         <div class="single__target multi-search-filter"
             onclick="Array.from(this.children).find(n=>n.tagName==='INPUT').focus()">
             <div class="all_add_keywords cursor__pointer" id="all_add_keywords">
             </div>
-            <input placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
+            <input id="keywords" placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
+            <input required name="all_keywords" id="all_keywords" placeholder="Add Keywords" hidden type="text">
         </div>
+
+        <button class="btn btn-outline-success my-5 rounded-pill" type="submit">Submit</button>
+    </div>
     </div>
     <div>
         <h1 class="fw-bold">Upload the Resources Here...</h1>
@@ -95,14 +113,18 @@
         <div class="all_file__upload mt-3">
 
             <div class="single__file__uploaded">
-            <div>
-                <input placeholder="File Name..." class="form-control rounded-end-pill border border-2" type="text"
-                    id="filename">
+                <button class="btn btn-danger btn-sm my-0 float-end" onclick="deleteNode(this)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+                <div>
+                    <input placeholder="File Name..." class="form-control rounded-end-pill border border-2" type="text"
+                        id="filename" name="filename">
+                </div>
+                <div id="file__input__div">
+                    <input class="form-control rounded-end-pill border border-2" type="file" id="file" name="file">
+                </div>
+
             </div>
-            <div id="file__input__div">
-                <input class="form-control rounded-end-pill border border-2" type="file" id="file">
-            </div>
-        </div>
 
 
             <button type="button" class="btn btn-primary rounded-end-pill" onclick="addFileInput()">Add More
@@ -111,30 +133,77 @@
         </div>
 
     </div>
+
 </form>
 <script>
-    function multiSearchKeyup(inputElement) {
-        if (event.keyCode === 13) {
-            var allAddKeywordsElement = inputElement.parentNode.querySelector('#all_add_keywords');
-            var newFilterItem = createFilterItem(inputElement.value);
-            allAddKeywordsElement.appendChild(newFilterItem); // Append as a child to allAddKeywordsElement
-            inputElement.value = "";
-        }
-        function createFilterItem(text) {
-            const item = document.createElement("div");
-            item.setAttribute("class", "multi-search-item");
-            item.addEventListener("click", function() {this.remove()})
-            const span = `${text}`;
-            // const close = `<div class="fa fa-close" onclick="this.parentNode.remove()"></div>`;
-            item.innerHTML = span ;
-            return item;
-        }
+
+    function deleteNode(elem) {
+        var parentDiv = elem.parentNode;
+
+        parentDiv.parentNode.removeChild(parentDiv);
     };
+
+    function setValue(elem, prev, now) {
+        elem.setAttribute('value', `${prev}${prev && ','}${now}`)
+    };
+
+    function multiSearchKeyup(inputElement) {
+        if (inputElement.value) {
+            if (event.keyCode === 13) {
+                var allAddKeywordsElement = inputElement.parentNode.querySelector('#all_add_keywords');
+                let hidden_Keywords = inputElement.parentNode.querySelector('#all_keywords');
+                setValue(hidden_Keywords, hidden_Keywords.value, inputElement.value);
+                var newFilterItem = createFilterItem(inputElement.value, hidden_Keywords);
+                allAddKeywordsElement.appendChild(newFilterItem);
+                inputElement.value = "";
+            }
+        }
+    }
+    function createFilterItem(text, hidden_Keywords) {
+        const item = document.createElement("div");
+        item.setAttribute("class", "multi-search-item");
+        item.addEventListener("click", function () {
+            this.remove();
+            let new_val = hidden_Keywords.value;
+
+            // Remove the keyword from the string
+            new_val = new_val.replace(text, '');
+
+            // Remove any leading comma
+            if (new_val.startsWith(',')) {
+                new_val = new_val.substring(1);
+            }
+
+            // Remove any trailing comma
+            if (new_val.endsWith(',')) {
+                new_val = new_val.substring(0, new_val.length - 1);
+            }
+
+            // Remove any double commas resulting from keyword removal
+            new_val = new_val.replace(/,,/g, ',');
+
+            hidden_Keywords.setAttribute('value', new_val);
+        });
+        const span = text;
+        item.innerHTML = span;
+        return item;
+    }
+
 
     function addFileInput() {
         var fileUploadDiv = document.querySelector('.all_file__upload');
         var newFileDiv = document.createElement('div');
         newFileDiv.classList.add('single__file__uploaded');
+
+        var deleteButton = document.createElement('button');
+        deleteButton.addEventListener('click', function () {
+            deleteNode(this);
+        });
+
+        deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'my-0', 'float-end');
+        deleteButton.innerHTML = '<i class="fa fa-trash-o"></i>';
+
+
 
         var fileNameInput = document.createElement('input');
         fileNameInput.type = 'text';
@@ -145,12 +214,14 @@
         fileInput.type = 'file';
         fileInput.classList.add('form-control', 'rounded-end-pill', 'border', 'border-2');
 
+        newFileDiv.appendChild(deleteButton);
         newFileDiv.appendChild(fileNameInput);
         newFileDiv.appendChild(fileInput);
 
         // Insert the new div after the first div with the class 'single__file__uploaded'
         fileUploadDiv.insertBefore(newFileDiv, fileUploadDiv.children[1]);
     }
+
 
 </script>
 {% endblock content %}

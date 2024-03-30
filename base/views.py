@@ -101,4 +101,49 @@ def logout_view(request):
 
 @login_required
 def create_article_view(request):
+
+    print(request.POST)
+    print(request.FILES)
+    if request.method == 'POST':
+        # Process form data
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        article_type = request.POST.get('article_type')
+        disclaimer = request.POST.get('disclaimer')
+        copyright = request.POST.get('copyright')
+        institution = request.POST.get('institute')
+
+        # Process other form fields similarly
+
+        # Create Article instance
+        # article = Article.objects.create(
+        #     title=title,
+        #     description=description,
+        #     # Assign other fields here
+        # )
+
+        # Process keywords
+        keywords = request.POST.get('all_keywords')
+        if keywords:
+            keywords = keywords.split(',')
+
+        # for keyword in keywords:
+        #     # Assuming Keyword model has 'name' field
+        #     keyword_obj, created = Keyword.objects.get_or_create(name=keyword)
+        #     article.keywords.add(keyword_obj)
+
+        # Process resources
+        # for file in request.FILES
+        files = request.FILES.get('file')  
+        print(files)
+
+        # for file in files:
+        #     # Create Resources instance
+        #     resource = Resources.objects.create(file=file)
+        #     # Assign resource to article
+        #     article.resources.add(resource)
+
+        # Redirect to success page or do whatever you want
+        return redirect('homepage_view')  # Replace 'success_url_name_here' with your URL name
+
     return render(request, 'base/create_article.html')
