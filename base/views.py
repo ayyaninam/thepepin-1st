@@ -219,8 +219,8 @@ def create_article_view(request):
 
 @login_required
 def user_profile_edit_view(request):
+    user = request.user
     if request.method == 'POST':
         pass
-        
 
     return render(request, 'base/user_profile_edit.html')

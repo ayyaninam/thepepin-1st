@@ -21,7 +21,8 @@
 
 
             <div class="form-floating mb-3">
-                <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name">
+                <input value="{{request.user.first_name}}" type="text" id="first_name" name="first_name"
+                    class="form-control" placeholder="First Name">
                 <label for="first_name">First Name</label>
             </div>
 
@@ -34,7 +35,8 @@
 
 
             <div class="form-floating mb-3">
-                <input type="text" id="last_name" name="last_name" class="form-control" placeholder="First Name">
+                <input value="{{request.user.last_name}}" type="text" id="last_name" name="last_name"
+                    class="form-control" placeholder="First Name">
                 <label for="last_name">Last Name</label>
             </div>
 
@@ -42,7 +44,8 @@
     </div>
 
     <div class="form-floating mb-3">
-        <input type="text" id="user_title" name="user_title" class="form-control" placeholder="Title">
+        <input value="{{request.user.user_title}}" type="text" id="user_title" name="user_title" class="form-control"
+            placeholder="Title">
         <label for="user_title">Title</label>
     </div>
 
@@ -50,7 +53,7 @@
 
     <div class="form-floating mb-3">
         <textarea type="text" id="user_bio" name="user_bio" class="form-control" placeholder="Bio"
-            style="height: 200px;"></textarea>
+            style="height: 200px;">{{request.user.user_bio}}</textarea>
         <label for="user_bio">Bio</label>
     </div>
 
@@ -59,16 +62,16 @@
 
         <div class="col">
             <div class="form-floating mb-3">
-                <input type="text" onChange="validateUrl(this)" id="facebook_link" name="facebook_link"
-                    class="form-control" placeholder="facebook Link">
+                <input value="{{request.user.facebook_link}}" type="text" onChange="validateUrl(this)"
+                    id="facebook_link" name="facebook_link" class="form-control" placeholder="facebook Link">
                 <label for="facebook_link">Facebook url</label>
             </div>
         </div>
         <div class="col">
 
             <div class="form-floating mb-3">
-                <input type="text" onChange="validateUrl(this)" id="twitter_link" name="twitter_link"
-                    class="form-control" placeholder="twitter Link">
+                <input value="{{request.user.twitter_link}}" type="text" onChange="validateUrl(this)" id="twitter_link"
+                    name="twitter_link" class="form-control" placeholder="twitter Link">
                 <label for="twitter_link">Twitter url</label>
             </div>
         </div>
@@ -77,16 +80,16 @@
     <div class="row">
         <div class="col">
             <div class="form-floating mb-3">
-                <input type="text" onChange="validateUrl(this)" id="linkedin_link" name="linkedin_link"
-                    class="form-control" placeholder="linkedin Link">
+                <input value="{{request.user.linkedin_link}}" type="text" onChange="validateUrl(this)"
+                    id="linkedin_link" name="linkedin_link" class="form-control" placeholder="linkedin Link">
                 <label for="linkedin_link">Linkedin url</label>
             </div>
         </div>
         <div class="col">
 
             <div class="form-floating mb-3">
-                <input type="text" onChange="validateUrl(this)" id="instagram_link" name="instagram_link"
-                    class="form-control" placeholder="instagram Link">
+                <input value="{{request.user.instagram_link}}" type="text" onChange="validateUrl(this)"
+                    id="instagram_link" name="instagram_link" class="form-control" placeholder="instagram Link">
                 <label for="instagram_link">Instagram url</label>
             </div>
         </div>
@@ -100,10 +103,34 @@
         <hr>
         <div class="all_specialty all_listing" id="all_specialty">
 
+            {% for specialty in request.user.specialty.all %}
+<div class="single">
+            <div class="form-floating mb-3">
+
+
+                <input value="{{specialty.title}}" type="text" id="expertise_{{forloop.counter}}"
+                    name="expertise_{{forloop.counter}}" class="form-control"
+                    placeholder="Expertise {{forloop.counter}}">
+
+                <label for="expertise_{{forloop.counter}}">Expertise {{forloop.counter}}</label>
+
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea id="expertise_desc_{{forloop.counter}}" name="expertise_desc_{{forloop.counter}}"
+                    class="form-control my-2" style="height: 200px;"
+                    placeholder="Short Description">{{specialty.short_description}}</textarea>
+
+                <label for="expertise_desc_{{forloop.counter}}">Short Description</label>
+            </div>
+        </div>
+            {% endfor %}
+
         </div>
 
-    <button onclick="addBtnClicked(this, 'spe')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Specialty</button>
-    
+        <button onclick="addBtnClicked(this, 'spe')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+            Specialty</button>
+
     </div>
 
 
@@ -116,8 +143,9 @@
 
         </div>
 
-    <button onclick="addBtnClicked(this, 'exp')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Expertise</button>
-    
+        <button onclick="addBtnClicked(this, 'exp')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+            Expertise</button>
+
     </div>
 
 
@@ -129,8 +157,9 @@
 
         </div>
 
-    <button onclick="addBtnClicked(this, 'edu')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Education</button>
-    
+        <button onclick="addBtnClicked(this, 'edu')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+            Education</button>
+
     </div>
 
 
@@ -142,7 +171,8 @@
 
         </div>
 
-    <button onclick="addBtnClicked(this, 'aff')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Affiliation</button>
+        <button onclick="addBtnClicked(this, 'aff')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+            Affiliation</button>
     </div>
 
 
@@ -154,7 +184,8 @@
 
         </div>
 
-    <button onclick="addBtnClicked(this, 'haa')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Honour and Awards</button>
+        <button onclick="addBtnClicked(this, 'haa')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+            Honour and Awards</button>
     </div>
 
 
@@ -208,56 +239,127 @@
         return isValid;
     }
 
+    function createPacker(formDiv, formDivDesc, formIndex, name){
+    formDiv.innerHTML =  createInputwithLabel(`education_${formIndex}`, `form-control my-2`, `${name} ${formIndex}`);
 
-function addBtnClicked(ele, what) {
-    console.log()
-    const formIndex = ele.parentNode.querySelectorAll('.all_listing')[0].querySelectorAll('div').length + 1
-
-    const formDiv = document.createElement('div');
-    formDiv.className = 'form-floating mb-3';
-    formDiv.id = `form_${formIndex}`;
-
-    
-
-
-    if (what=='aff'){
-
-        formDiv.innerHTML = `
-        <input type="text" id="affiliation_${formIndex}" name="affiliation_${formIndex}" class="form-control" placeholder="Affiliation ${formIndex}">
-        <label for="affiliation_${formIndex}">Affiliation ${formIndex}</label>
-    `;
-
-    }else if (what=='exp'){
-
-        formDiv.innerHTML = `
-        <input type="text" id="expertise_${formIndex}" name="expertise_${formIndex}" class="form-control" placeholder="Expertise ${formIndex}">
-        <label for="expertise_${formIndex}">Expertise ${formIndex}</label>
-    `;
-    }else if (what=='edu'){
-
-        formDiv.innerHTML = `
-        <input type="text" id="education_${formIndex}" name="education_${formIndex}" class="form-control" placeholder="Education ${formIndex}">
-        <label for="education_${formIndex}">Education ${formIndex}</label>
-    `;
-    }else if (what=='haa'){
-
-        formDiv.innerHTML = `
-        <input type="text" id="haa_${formIndex}" name="haa_${formIndex}" class="form-control" placeholder="Honour and Awards ${formIndex}">
-        <label for="haa_${formIndex}">Honour and Awards ${formIndex}</label>
-    `;
-    }else if (what=='spe'){
-
-        formDiv.innerHTML = `
-        <input type="text" id="specialty_${formIndex}" name="specialty_${formIndex}" class="form-control" placeholder="Specialty ${formIndex}">
-        <label for="specialty_${formIndex}">Specialty ${formIndex}</label>
-    `;
-
+    formDivDesc.innerHTML = createTextAreawithLabel( `education_desc_${formIndex}`,  `form-control my-2`, `Short Description`, `200px` );
     }
 
+    function createTextAreawithLabel(id, className, placeholder, height){
+        var form = document.createElement("div")
+        form.className = "form-floating mb-3"
+        var label = document.createElement("label")
+        label.setAttribute('for', id)
+        label.innerText = placeholder
+
+        var textarea = document.createElement("textarea");
+        textarea.id = id;
+        textarea.name = id;
+        textarea.className = "form-control my-2";
+        textarea.style.height = "200px";
+        textarea.placeholder = "Short Description";
+        textarea.value = "Initial value for the textarea";
+
+        form.appendChild(textarea);
+        form.appendChild(label);
+        return form.innerHTML;
+    }
+    function createInputwithLabel(id, className, placeholder){
+
+        var form = document.createElement("div")
+        form.className = "form-floating mb-3"
+        var label = document.createElement("label")
+        label.setAttribute('for', id)
+        label.innerText = placeholder
+
+        var input = document.createElement("input");
+        input.id = id;
+        input.name = id;
+        input.className = "form-control my-2";
+        input.placeholder = placeholder;
+
+        form.appendChild(input);
+        form.appendChild(label);
+        return form.innerHTML;
+    }
+
+    function addBtnClicked(ele, what) {
+        console.log()
+        const formIndex = ele.parentNode.querySelectorAll('.all_listing')[0].querySelectorAll('div').length + 1
+
+        const formDiv = document.createElement('div');
+        formDiv.className = 'form-floating mb-3';
+        formDiv.id = `form_${formIndex}`;
+
+        const formDivDesc = document.createElement('div');
+        formDivDesc.className = 'form-floating mb-3';
+        formDivDesc.id = `form_${formIndex}`;
 
 
-    ele.parentNode.querySelectorAll('.all_listing')[0].appendChild(formDiv)
-    
-}
+
+
+        if (what == 'aff') {
+
+            formDiv.innerHTML = `
+        <input type="text" id="affiliation_${formIndex}" name="affiliation_${formIndex}" class="form-control" placeholder="Affiliation ${formIndex}">
+        <label for="affiliation_${formIndex}">Affiliation ${formIndex}</label>
+    `;  
+
+
+
+
+        } else if (what == 'exp') {
+
+            formDiv.innerHTML = `
+        <input type="text" id="expertise_${formIndex}" name="expertise_${formIndex}" class="form-control" placeholder="Expertise ${formIndex}">
+        <label for="expertise_${formIndex}">Expertise ${formIndex}</label>`;
+        } else if (what == 'edu') {
+
+    formDiv.innerHTML =  createInputwithLabel(`education_${formIndex}`, `form-control my-2`, `Education ${formIndex}`);
+
+    formDivDesc.innerHTML = createTextAreawithLabel( `education_desc_${formIndex}`,  `form-control my-2`, `Short Description`, `200px` );
+
+        } else if (what == 'haa') {
+
+    formDiv.innerHTML =  createInputwithLabel(`haa_${formIndex}`, `form-control my-2`, `Honour and Awards ${formIndex}`);
+
+formDivDesc.innerHTML = createTextAreawithLabel( `haa_desc_${formIndex}`,  `form-control my-2`, `Short Description`, `200px` );
+
+        } else if (what == 'spe') {
+
+            createPacker(formDiv, formDivDesc, formIndex)
+
+        }
+
+
+
+// <div class="form-floating mb-3">
+
+
+// <input value="{{specialty.title}}" type="text" id="expertise_{{forloop.counter}}"
+//     name="expertise_{{forloop.counter}}" class="form-control"
+//     placeholder="Expertise {{forloop.counter}}">
+
+// <label for="expertise_{{forloop.counter}}">Expertise {{forloop.counter}}</label>
+
+// </div>
+
+// <div class="form-floating mb-3">
+// <textarea id="expertise_desc_{{forloop.counter}}" name="expertise_desc_{{forloop.counter}}"
+//     class="form-control my-2" style="height: 200px;"
+//     placeholder="Short Description">{{specialty.short_description}}</textarea>
+
+// <label for="expertise_desc_{{forloop.counter}}">Short Description</label>
+// </div>
+
+
+        let single_div = document.createElement('div');
+        single_div.className = 'single';
+        single_div.appendChild(formDiv)
+        single_div.appendChild(formDivDesc)
+
+        ele.parentNode.querySelectorAll('.all_listing')[0].appendChild(single_div)
+
+    }
 </script>
 {% endblock content %}
