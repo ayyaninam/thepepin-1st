@@ -217,15 +217,10 @@ def create_article_view(request):
     return render(request, 'base/create_article.html', context)
 
 
-
+@login_required
 def user_profile_edit_view(request):
     if request.method == 'POST':
-        form = UserForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save(commit=False)
-            # Additional processing if needed before saving the user
-            user.save()
-            return redirect('homepage_view')  # Redirect to a success page after saving
-    else:
-        form = UserForm()
-    return render(request, 'base/user_profile_edit.html', {'form': form})
+        pass
+        
+
+    return render(request, 'base/user_profile_edit.html')

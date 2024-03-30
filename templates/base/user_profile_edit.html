@@ -1,27 +1,263 @@
 {% extends "base/base.html" %}
 
 {% block content %}
-<form method="post" class="w-50 mx-auto" enctype="multipart/form-data">
+
+{% if messages %}
+<ul class="errorlist">
+    {% for message in messages %}
+    <button class="rounded btn btn-danger mx-auto d-flex">{{ message }}</button>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<form method="post" novalidate class="w-50 mx-auto" action="{% url 'user_profile_edit_view' %}"
+    enctype="multipart/form-data">
     {% csrf_token %}
-    {% for field in form %}
-            {% if field.field.widget.input_type == 'text' %}
-                <div class="form-floating mb-3 {% if field.errors %}has-error{% endif %}">
-                    <textarea class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" {% if field.value %}value="{{ field.value }}" {% endif %} placeholder="{{ field.label }}"></textarea>
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% for error in field.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="form-floating mb-3 {% if field.errors %}has-error{% endif %}">
-                    <input type="{{ field.field.widget.input_type }}" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" {% if field.value %}value="{{ field.value }}" {% endif %} placeholder="{{ field.label }}">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% for error in field.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endfor %}
-    <button type="submit">Save</button>
+
+
+    <div class="row">
+        <div class="col">
+
+
+            <div class="form-floating mb-3">
+                <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name">
+                <label for="first_name">First Name</label>
+            </div>
+
+
+        </div>
+
+
+
+        <div class="col">
+
+
+            <div class="form-floating mb-3">
+                <input type="text" id="last_name" name="last_name" class="form-control" placeholder="First Name">
+                <label for="last_name">Last Name</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="text" id="user_title" name="user_title" class="form-control" placeholder="Title">
+        <label for="user_title">Title</label>
+    </div>
+
+
+
+    <div class="form-floating mb-3">
+        <textarea type="text" id="user_bio" name="user_bio" class="form-control" placeholder="Bio"
+            style="height: 200px;"></textarea>
+        <label for="user_bio">Bio</label>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col">
+            <div class="form-floating mb-3">
+                <input type="text" onChange="validateUrl(this)" id="facebook_link" name="facebook_link"
+                    class="form-control" placeholder="facebook Link">
+                <label for="facebook_link">Facebook url</label>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="form-floating mb-3">
+                <input type="text" onChange="validateUrl(this)" id="twitter_link" name="twitter_link"
+                    class="form-control" placeholder="twitter Link">
+                <label for="twitter_link">Twitter url</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-floating mb-3">
+                <input type="text" onChange="validateUrl(this)" id="linkedin_link" name="linkedin_link"
+                    class="form-control" placeholder="linkedin Link">
+                <label for="linkedin_link">Linkedin url</label>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="form-floating mb-3">
+                <input type="text" onChange="validateUrl(this)" id="instagram_link" name="instagram_link"
+                    class="form-control" placeholder="instagram Link">
+                <label for="instagram_link">Instagram url</label>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="specialty_tag my-4">
+        <h1 class="fw-bold">Your Specialties</h1>
+        <hr>
+        <div class="all_specialty all_listing" id="all_specialty">
+
+        </div>
+
+    <button onclick="addBtnClicked(this, 'spe')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Specialty</button>
+    
+    </div>
+
+
+
+
+    <div class="expertise_tag my-4">
+        <h1 class="fw-bold">Your Expertise</h1>
+        <hr>
+        <div class="all_expertise all_listing" id="all_expertises">
+
+        </div>
+
+    <button onclick="addBtnClicked(this, 'exp')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Expertise</button>
+    
+    </div>
+
+
+
+    <div class="education_tag my-4">
+        <h1 class="fw-bold">Your Education</h1>
+        <hr>
+        <div class="all_education all_listing" id="all_educations">
+
+        </div>
+
+    <button onclick="addBtnClicked(this, 'edu')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Education</button>
+    
+    </div>
+
+
+
+    <div class="affiliation_tag my-4">
+        <h1 class="fw-bold">Your Affiliations</h1>
+        <hr>
+        <div class="all_affiliations all_listing" id="all_affiliations">
+
+        </div>
+
+    <button onclick="addBtnClicked(this, 'aff')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Affiliation</button>
+    </div>
+
+
+
+    <div class="honourandaward_tag my-4">
+        <h1 class="fw-bold">Your Honour and Awards</h1>
+        <hr>
+        <div class="all_honourandawards all_listing" id="all_honourandawards">
+
+        </div>
+
+    <button onclick="addBtnClicked(this, 'haa')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add Honour and Awards</button>
+    </div>
+
+
+
+
+
+
+    <button class="btn btn-primary" id="save__profile__change" type="submit">Save</button>
 </form>
+<script>
+
+    function validateUrl(element) {
+        // Extract URL value from the input element
+        var url = element.value;
+
+        // Extract the ID of the element
+        var elementId = element.id;
+
+        var urlRegex = new RegExp(
+            "^(https?:\\/\\/)?" + // protocol
+            "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+            "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+            "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+            "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+            "(\\#[-a-z\\d_]*)?$",
+            "i",
+            "|^$", // empty input
+        );
+        var isValid = url !== "" ? urlRegex.test(url) : true;
+        if (!isValid) {
+
+            var errorMessage = element.parentNode.querySelector('p');
+            if (!errorMessage) {
+                errorMessage = document.createElement('p');
+            }
+
+            errorMessage.className = 'invalid-feedback text-danger mx-2';
+            errorMessage.innerText = 'URL is not valid.';
+            element.parentNode.appendChild(errorMessage);
+
+            save__profile__change.disabled = true;
+        } else {
+            // URL is valid, remove error message if exists
+            var errorMessage = element.parentNode.querySelector('p');
+            if (errorMessage) {
+                element.parentNode.removeChild(errorMessage);
+            };
+            save__profile__change.disabled = false;
+        }
+
+        return isValid;
+    }
+
+
+function addBtnClicked(ele, what) {
+    console.log()
+    const formIndex = ele.parentNode.querySelectorAll('.all_listing')[0].querySelectorAll('div').length + 1
+
+    const formDiv = document.createElement('div');
+    formDiv.className = 'form-floating mb-3';
+    formDiv.id = `form_${formIndex}`;
+
+    
+
+
+    if (what=='aff'){
+
+        formDiv.innerHTML = `
+        <input type="text" id="affiliation_${formIndex}" name="affiliation_${formIndex}" class="form-control" placeholder="Affiliation ${formIndex}">
+        <label for="affiliation_${formIndex}">Affiliation ${formIndex}</label>
+    `;
+
+    }else if (what=='exp'){
+
+        formDiv.innerHTML = `
+        <input type="text" id="expertise_${formIndex}" name="expertise_${formIndex}" class="form-control" placeholder="Expertise ${formIndex}">
+        <label for="expertise_${formIndex}">Expertise ${formIndex}</label>
+    `;
+    }else if (what=='edu'){
+
+        formDiv.innerHTML = `
+        <input type="text" id="education_${formIndex}" name="education_${formIndex}" class="form-control" placeholder="Education ${formIndex}">
+        <label for="education_${formIndex}">Education ${formIndex}</label>
+    `;
+    }else if (what=='haa'){
+
+        formDiv.innerHTML = `
+        <input type="text" id="haa_${formIndex}" name="haa_${formIndex}" class="form-control" placeholder="Honour and Awards ${formIndex}">
+        <label for="haa_${formIndex}">Honour and Awards ${formIndex}</label>
+    `;
+    }else if (what=='spe'){
+
+        formDiv.innerHTML = `
+        <input type="text" id="specialty_${formIndex}" name="specialty_${formIndex}" class="form-control" placeholder="Specialty ${formIndex}">
+        <label for="specialty_${formIndex}">Specialty ${formIndex}</label>
+    `;
+
+    }
+
+
+
+    ele.parentNode.querySelectorAll('.all_listing')[0].appendChild(formDiv)
+    
+}
+</script>
 {% endblock content %}

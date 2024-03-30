@@ -15,7 +15,6 @@ admin.site.register(Institution)
 admin.site.register(Resources)
 
 
-
 def duplicate_selected(modeladmin, request, queryset):
     for obj in queryset:
         obj.pk = None  # Set primary key to None to create a new entry
