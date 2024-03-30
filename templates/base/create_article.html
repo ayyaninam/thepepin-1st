@@ -22,7 +22,7 @@
 {% endif %}
 
 <form action="{% url 'create_article_view' %}" class="needs-validation main__create_article__form"
-    id="article__creation__form" method="POST" onkeydown="return event.key != 'Enter';">
+    id="article__creation__form" enctype="multipart/form-data" method="POST" onkeydown="return event.key != 'Enter';">
     {% csrf_token %}
     <!-- title  -->
     <div class="w-100">

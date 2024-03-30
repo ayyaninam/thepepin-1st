@@ -101,9 +101,6 @@ def logout_view(request):
 
 @login_required
 def create_article_view(request):
-
-    print(request.POST)
-    print(request.FILES)
     if request.method == 'POST':
         # Process form data
         title = request.POST.get('title')
