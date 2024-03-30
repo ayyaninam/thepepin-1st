@@ -14,20 +14,6 @@ class LoginForm(forms.ModelForm):
         model = User
         fields = ['email', 'password']
 
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     email = cleaned_data.get("email")
-    #     password = cleaned_data.get("password")
-        
-    #     if email and password:
-    #         self.user = authenticate(email=email, password=password)
-    #         if self.user is None:
-    #             raise forms.ValidationError("Invalid email or password.")
-    #     return cleaned_data
-
-
-
-
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
 
@@ -35,4 +21,10 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ['email', 'password1', 'password2']
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['profile_picture', 'email', 'user_title', 'user_bio', 'facebook_link', 'twitter_link',
+                  'linkedin_link', 'instagram_link', 'specialty', 'expertise', 'education', 'honors_and_awards',
+                  'affiliations']
 

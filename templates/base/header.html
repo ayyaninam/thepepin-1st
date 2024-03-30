@@ -12,11 +12,13 @@
     
     {% if user.is_authenticated %}
         <!-- User is logged in -->
-        <a href="{% url 'logout_view' %}" class="bttn green_btn no_underline text-dark">Logout</a>
+        <a href="{% url 'logout_view' %}" class="bttn  no_underline text-dark">
+            <i class="fa fa-sign-out"></i> Logout
+        </a>
     {% else %}
         <!-- User is not logged in -->
-        <a href="{% url 'login_view' %}" class="bttn lblue_btn no_underline text-dark">Login</a>
-        <a href="{% url 'signup_view' %}" class="bttn green_btn no_underline text-dark">Signup</a>
+        <a href="{% url 'login_view' %}" class="bttn  no_underline text-dark"><i class="fa fa-sign-in"></i> Login</a>
+        <a href="{% url 'signup_view' %}" class="bttn  no_underline text-dark">Signup</a>
     {% endif %}
 </div>
 </nav>

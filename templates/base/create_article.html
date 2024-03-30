@@ -30,7 +30,7 @@
         <h1 class="fw-bold my-5 d-flex justify-content-center">Article Title, Type and Institution</h1>
 
         <div class="single__target">
-            <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Title" maxlength="254" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -42,13 +42,11 @@
         <div class="single__target">
             <input class="form-control" list="article_type_datalist" id="article_type"
                 placeholder="Select the Article Type..." name="article_type" required>
+                  
             <datalist id="article_type_datalist">
-                <option value="San Francisco">
-                <option value="New York">
-                <option value="Seattle">
-                <option value="Los Angeles">
-                <option value="Chicago">
-
+                {% for articletype in articletypes %}
+                <option value={{articletype}}>
+                    {% endfor %}
             </datalist>
 
 
@@ -60,11 +58,9 @@
             <input required class="form-control" list="institute_datalist" id="institute"
                 placeholder="Select the Institution..." name="institute">
             <datalist id="institute_datalist">
-                <option value="San Francisco">
-                <option value="New York">
-                <option value="Seattle">
-                <option value="Los Angeles">
-                <option value="Chicago">
+                {% for institution in institutions %}
+                <option value={{institution}}>
+                    {% endfor %}
 
             </datalist>
 
@@ -98,7 +94,7 @@
             onclick="Array.from(this.children).find(n=>n.tagName==='INPUT').focus()">
             <div class="all_add_keywords cursor__pointer" id="all_add_keywords">
             </div>
-            <input id="keywords" placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
+            <input maxlength="30" id="keywords" placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
             <input required name="all_keywords" id="all_keywords" placeholder="Add Keywords" hidden type="text">
         </div>
 
@@ -108,7 +104,7 @@
     <div>
         <h1 class="fw-bold">Upload the Resources Here...</h1>
         <hr>
-        <p class="fw-bold my-2 text-success ">You can provide name of the file (if you want)</p>
+
 
         <div class="all_file__upload mt-3">
 

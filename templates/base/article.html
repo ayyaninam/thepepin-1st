@@ -5,8 +5,8 @@
 <div class="articles_with_side_bar">
 
 <div class="article__encloser my-5 mx-5">
-    <small class="d-block">{{article.article_type}}</small>
-    <small class="d-block"><b>{{article.institution}}</b></small>
+    <small class="d-block"><span class="text-muted">Type:</span> {{article.article_type}}</small>
+    <small class="d-block"><span class="test-muted">Institution:</span> {{article.institution}}</small>
     <h2 class="headline__art_en">{{article.title}}</h2>
     <div class="description">
         <hr>
@@ -43,11 +43,11 @@
 
     <div class="resources">
         <hr>
-        <h1 class="">Available Resources</h1>
-        <ul>
+        <h1 class="fw-bold">Available Resources</h1>
+        <ul class="d-flex justify-content-center align-items-center flex-wrap">
             {% if article.resources.all %}
             {% for document in article.resources.all %}
-        <div class="my-4">
+        <div class="m-4">
             <a href="{{ document.file.url }}" class="btn btn-outline-dark"><i class="fa fa-download"></i> {{ document.get__name }}</a>
         </div>
             {% endfor %}

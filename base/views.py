@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import Http404
 from base.models import * 
 from django.urls import reverse
+from base.forms import *
 
 
 def login_required(view_func):
@@ -99,8 +100,12 @@ def logout_view(request):
     return redirect('homepage_view')
 
 
+
+
+
 @login_required
 def create_article_view(request):
+    context = {}
     if request.method == 'POST':
         # Process form data
         title = request.POST.get('title')
@@ -187,16 +192,40 @@ def create_article_view(request):
             
 
         
-        Article.objects.create(
+        created_article = Article.objects.create(
             title = title,
             description = description,
             user = user,
             institution=institution_obj,
             article_type=art_type_obj,
-            resources=created_resource_ids,
-            keywords=created_keyword_ids,
+            # resources=created_resource_ids,
+            # keywords=created_keyword_ids,
             disclaimer = disclaimer,
             copyright = copyright,
         )
+        created_article.resources.add(*created_resource_ids)
+        created_article.keywords.add(*created_keyword_ids)
+        created_article.save()
+    
+    
+    else:
+        articletypes = ArticleType.objects.all()
+        institution = Institution.objects.all()
+        context.update({'articletypes':articletypes})
+        context.update({'institutions': institution})
 
-    return render(request, 'base/create_article.html')
+    return render(request, 'base/create_article.html', context)
+
+
+
+def user_profile_edit_view(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(commit=False)
+            # Additional processing if needed before saving the user
+            user.save()
+            return redirect('homepage_view')  # Redirect to a success page after saving
+    else:
+        form = UserForm()
+    return render(request, 'base/user_profile_edit.html', {'form': form})

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="post" action="{% url 'login_view' %}" class="login-form-container">
+<form method="post" action="{% url 'login_view' %}" class=" login-form-container">
   {% csrf_token %}
   
   {% if messages %}
@@ -14,23 +14,17 @@
 {% endif %}
 
 
-  <div class="form-group-container">
-    <label for="id_email" class="form-label">Email</label>
-    {{ form.email }}
-    {% for error in form.email.errors %}
-    <div class="error">{{ error }}</div>
+{% for field in form %}
+<div class="form-floating mb-3 {% if field.errors %}has-error{% endif %}">
+    <input type="{{ field.field.widget.input_type }}" placeholder="{{ field.label }}" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" {% if field.value %}value="{{ field.value }}" {% endif %}>
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {% for error in field.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
     {% endfor %}
-  </div>
-  <div class="form-group-container">
-    <label for="id_password" class="form-label">Password</label>
-    {{ form.password }}
-    {% for error in form.password.errors %}
-    <div class="error">{{ error }}</div>
-    {% endfor %}
-  </div>
-  {% if form.non_field_errors %}
-  <div class="error">{{ form.non_field_errors }}</div>
-  {% endif %}
+</div>
+{% endfor %}
+
+
   <div class="lower__btns">
 
   <button type="submit" class="green-bg no_border">Login</button>
