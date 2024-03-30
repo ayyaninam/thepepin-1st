@@ -110,27 +110,61 @@ def create_article_view(request):
         copyright = request.POST.get('copyright')
         institution = request.POST.get('institute')
 
-        # Process other form fields similarly
+        user = request.user
+        if not user:
+            error_message = f"User not logged in properly"
+            messages.error(request, error_message)
+            return redirect('homepage_view') 
+        if not title:
+            error_message = f"Please add title!"
+            messages.error(request, error_message)
+            return redirect('homepage_view') 
+        if not description:
+            error_message = f"Please add description!"
+            messages.error(request, error_message)
+            return redirect('homepage_view') 
+        if not institution:
+            error_message = f"Please add institution!"
+            messages.error(request, error_message)
+            return redirect('homepage_view') 
+        
+        if not article_type:
+            error_message = f"Please add article_type!"
+            messages.error(request, error_message)
+            return redirect('homepage_view') 
+        
 
-        # Create Article instance
-        # article = Article.objects.create(
-        #     title=title,
-        #     description=description,
-        #     # Assign other fields here
-        # )
+        # Process Article Type
+        try:
+            art_type_obj, created = ArticleType.objects.get_or_create(name = article_type)
+        except Exception as e:
+            error_message = f"Error occurred while processing. Error message: {str(e)}"
+            messages.error(request, error_message)
+            return redirect('homepage_view')
+
+        try:
+            institution_obj, created = Institution.objects.get_or_create(name = institution)
+        except Exception as e:
+            error_message = f"Error occurred while processing. Error message: {str(e)}"
+            messages.error(request, error_message)
+            return redirect('homepage_view')
+            
 
         # Process keywords
+        created_keyword_ids = []
         keywords = request.POST.get('all_keywords')
-        if keywords:
-            keywords = keywords.split(',')
-
-        # for keyword in keywords:
-        #     # Assuming Keyword model has 'name' field
-        #     keyword_obj, created = Keyword.objects.get_or_create(name=keyword)
-        #     article.keywords.add(keyword_obj)
+        keywords = keywords.split(',') if keywords else None
+        for keyword in keywords:
+            try:
+                keyword_obj, created = Keyword.objects.get_or_create(name=keyword)
+                created_keyword_ids.append(keyword_obj.id)
+            except Exception as e:
+                error_message = f"Error occurred while processing. Error message: {str(e)}"
+                messages.error(request, error_message)
+                return redirect('homepage_view') 
+        # End Process keywords
 
         # Process resources
-        # for file in request.FILES
         created_resource_ids = []
 
         for file in request.FILES:
@@ -148,10 +182,21 @@ def create_article_view(request):
 
             except Exception as e:
                 error_message = f"Error occurred while processing file: {file}. Error message: {str(e)}"
-
                 messages.error(request, error_message)
-
+                return redirect('homepage_view') 
             
-        return redirect('homepage_view') 
+
+        
+        Article.objects.create(
+            title = title,
+            description = description,
+            user = user,
+            institution=institution_obj,
+            article_type=art_type_obj,
+            resources=created_resource_ids,
+            keywords=created_keyword_ids,
+            disclaimer = disclaimer,
+            copyright = copyright,
+        )
 
     return render(request, 'base/create_article.html')
