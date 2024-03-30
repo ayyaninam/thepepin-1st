@@ -104,26 +104,26 @@
         <div class="all_specialty all_listing" id="all_specialty">
 
             {% for specialty in request.user.specialty.all %}
-<div class="single">
-            <div class="form-floating mb-3">
+            <div class="single">
+                <div class="form-floating mb-3">
 
 
-                <input value="{{specialty.title}}" type="text" id="expertise_{{forloop.counter}}"
-                    name="expertise_{{forloop.counter}}" class="form-control"
-                    placeholder="Expertise {{forloop.counter}}">
+                    <input value="{{specialty.title}}" type="text" id="specialty_{{forloop.counter}}"
+                        name="specialty_{{forloop.counter}}" class="form-control"
+                        placeholder="Specialty {{forloop.counter}}">
 
-                <label for="expertise_{{forloop.counter}}">Expertise {{forloop.counter}}</label>
+                    <label for="specialty_{{forloop.counter}}">Specialty {{forloop.counter}}</label>
 
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea id="specialty_desc_{{forloop.counter}}" name="specialty_desc_{{forloop.counter}}"
+                        class="form-control my-2" style="height: 200px;"
+                        placeholder="Short Description">{{specialty.short_description}}</textarea>
+
+                    <label for="specialty_desc_{{forloop.counter}}">Short Description</label>
+                </div>
             </div>
-
-            <div class="form-floating mb-3">
-                <textarea id="expertise_desc_{{forloop.counter}}" name="expertise_desc_{{forloop.counter}}"
-                    class="form-control my-2" style="height: 200px;"
-                    placeholder="Short Description">{{specialty.short_description}}</textarea>
-
-                <label for="expertise_desc_{{forloop.counter}}">Short Description</label>
-            </div>
-        </div>
             {% endfor %}
 
         </div>
@@ -239,13 +239,13 @@
         return isValid;
     }
 
-    function createPacker(formDiv, formDivDesc, formIndex, name){
-    formDiv.innerHTML =  createInputwithLabel(`education_${formIndex}`, `form-control my-2`, `${name} ${formIndex}`);
+    function createPacker(formDiv, formDivDesc, formIndex, name) {
+        formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name} ${formIndex}`);
 
-    formDivDesc.innerHTML = createTextAreawithLabel( `education_desc_${formIndex}`,  `form-control my-2`, `Short Description`, `200px` );
+        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}_desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`);
     }
 
-    function createTextAreawithLabel(id, className, placeholder, height){
+    function createTextAreawithLabel(id, className, placeholder, height) {
         var form = document.createElement("div")
         form.className = "form-floating mb-3"
         var label = document.createElement("label")
@@ -264,7 +264,7 @@
         form.appendChild(label);
         return form.innerHTML;
     }
-    function createInputwithLabel(id, className, placeholder){
+    function createInputwithLabel(id, className, placeholder) {
 
         var form = document.createElement("div")
         form.className = "form-floating mb-3"
@@ -284,8 +284,8 @@
     }
 
     function addBtnClicked(ele, what) {
-        console.log()
-        const formIndex = ele.parentNode.querySelectorAll('.all_listing')[0].querySelectorAll('div').length + 1
+        console.log(ele.parentNode.querySelectorAll('.all_listing>div').length)
+        const formIndex = ele.parentNode.querySelectorAll('.all_listing>div').length + 1
 
         const formDiv = document.createElement('div');
         formDiv.className = 'form-floating mb-3';
@@ -299,58 +299,19 @@
 
 
         if (what == 'aff') {
-
-            formDiv.innerHTML = `
-        <input type="text" id="affiliation_${formIndex}" name="affiliation_${formIndex}" class="form-control" placeholder="Affiliation ${formIndex}">
-        <label for="affiliation_${formIndex}">Affiliation ${formIndex}</label>
-    `;  
-
-
-
-
+            createPacker(formDiv, formDivDesc, formIndex, 'Affiliation')
         } else if (what == 'exp') {
-
-            formDiv.innerHTML = `
-        <input type="text" id="expertise_${formIndex}" name="expertise_${formIndex}" class="form-control" placeholder="Expertise ${formIndex}">
-        <label for="expertise_${formIndex}">Expertise ${formIndex}</label>`;
+            createPacker(formDiv, formDivDesc, formIndex, 'Expertise')
         } else if (what == 'edu') {
-
-    formDiv.innerHTML =  createInputwithLabel(`education_${formIndex}`, `form-control my-2`, `Education ${formIndex}`);
-
-    formDivDesc.innerHTML = createTextAreawithLabel( `education_desc_${formIndex}`,  `form-control my-2`, `Short Description`, `200px` );
-
+            createPacker(formDiv, formDivDesc, formIndex, 'Education')
         } else if (what == 'haa') {
-
-    formDiv.innerHTML =  createInputwithLabel(`haa_${formIndex}`, `form-control my-2`, `Honour and Awards ${formIndex}`);
-
-formDivDesc.innerHTML = createTextAreawithLabel( `haa_desc_${formIndex}`,  `form-control my-2`, `Short Description`, `200px` );
+            createPacker(formDiv, formDivDesc, formIndex, 'Honour and Awards')
 
         } else if (what == 'spe') {
 
-            createPacker(formDiv, formDivDesc, formIndex)
+            createPacker(formDiv, formDivDesc, formIndex, 'Specialty')
 
         }
-
-
-
-// <div class="form-floating mb-3">
-
-
-// <input value="{{specialty.title}}" type="text" id="expertise_{{forloop.counter}}"
-//     name="expertise_{{forloop.counter}}" class="form-control"
-//     placeholder="Expertise {{forloop.counter}}">
-
-// <label for="expertise_{{forloop.counter}}">Expertise {{forloop.counter}}</label>
-
-// </div>
-
-// <div class="form-floating mb-3">
-// <textarea id="expertise_desc_{{forloop.counter}}" name="expertise_desc_{{forloop.counter}}"
-//     class="form-control my-2" style="height: 200px;"
-//     placeholder="Short Description">{{specialty.short_description}}</textarea>
-
-// <label for="expertise_desc_{{forloop.counter}}">Short Description</label>
-// </div>
 
 
         let single_div = document.createElement('div');
