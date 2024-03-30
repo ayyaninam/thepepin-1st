@@ -131,16 +131,27 @@ def create_article_view(request):
 
         # Process resources
         # for file in request.FILES
-        files = request.FILES.get('file')  
-        print(files)
+        created_resource_ids = []
 
-        # for file in files:
-        #     # Create Resources instance
-        #     resource = Resources.objects.create(file=file)
-        #     # Assign resource to article
-        #     article.resources.add(resource)
+        for file in request.FILES:
+            try:
+                if 'file' in file:
+                    saveable_file = request.FILES.get(f'{file}')
+                    filename = ((request.POST.get(f'filename{file.split("file")[1]}')) or (saveable_file.name))
 
-        # Redirect to success page or do whatever you want
-        return redirect('homepage_view')  # Replace 'success_url_name_here' with your URL name
+                    created_res = Resources.objects.create(
+                        name = filename,
+                        file = saveable_file,
+                    )
+
+                    created_resource_ids.append(created_res.id)
+
+            except Exception as e:
+                error_message = f"Error occurred while processing file: {file}. Error message: {str(e)}"
+
+                messages.error(request, error_message)
+
+            
+        return redirect('homepage_view') 
 
     return render(request, 'base/create_article.html')

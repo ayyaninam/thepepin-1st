@@ -116,21 +116,29 @@
                 <button class="btn btn-danger btn-sm my-0 float-end" onclick="deleteNode(this)">
                     <i class="fa fa-trash-o"></i>
                 </button>
+
                 <div>
                     <input placeholder="File Name..." class="form-control rounded-end-pill border border-2" type="text"
-                        id="filename" name="filename">
+                        id="filename" required name="filename">
                 </div>
                 <div id="file__input__div">
-                    <input class="form-control rounded-end-pill border border-2" type="file" id="file" name="file">
+                    <input onchange="showProgress(event)" class="form-control rounded-end-pill border border-2"
+                        type="file" required id="file" name="file">
                 </div>
+                <div class="progress_bar__div">
+                    <progress value="0" max="100" id="fileProgress" style="display: none;"></progress>
+                    <div id="progressStatus" class="ariel" style="display: none;"></div>
+                </div>
+
 
             </div>
 
 
-            <button type="button" class="btn btn-primary rounded-end-pill" onclick="addFileInput()">Add More
-                Files</button>
-
         </div>
+
+        <button type="button" class="btn btn-primary rounded-end-pill" onclick="addFileInput()">Add More
+            Files</button>
+
 
     </div>
 
@@ -203,23 +211,90 @@
         deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'my-0', 'float-end');
         deleteButton.innerHTML = '<i class="fa fa-trash-o"></i>';
 
-
+        // Create unique IDs based on the number of existing file inputs
+        var index = fileUploadDiv.getElementsByClassName('single__file__uploaded').length;
+        newFileDiv.id = 'fileDiv' + (index + 1); // Set unique ID for the file div
 
         var fileNameInput = document.createElement('input');
         fileNameInput.type = 'text';
+        fileNameInput.required = true;
         fileNameInput.placeholder = 'File Name...';
         fileNameInput.classList.add('form-control', 'rounded-end-pill', 'border', 'border-2');
+        fileNameInput.id = 'filename' + (index + 1); // Set unique ID for filename input
+        fileNameInput.name = 'filename' + (index + 1); // Set unique ID for filename input
 
         var fileInput = document.createElement('input');
         fileInput.type = 'file';
+        fileInput.required = true;
+
+        fileInput.addEventListener('change', function (event) {
+            showProgress(event)
+        });
+
         fileInput.classList.add('form-control', 'rounded-end-pill', 'border', 'border-2');
+        fileInput.id = 'file' + (index + 1); // Set unique ID for file input
+        fileInput.name = 'file' + (index + 1); // Set unique ID for file input
+
+        // Progress bar div
+        var progressBar = document.createElement('div');
+        progressBar.classList.add('progress_bar__div');
+        progressBar.innerHTML = `
+        <progress value="0" max="100" id="fileProgress${index + 1}" style="display: none;"></progress>
+            <div id="progressStatus${index + 1}" class="ariel" style="display: none;"></div>
+    `;
+
 
         newFileDiv.appendChild(deleteButton);
         newFileDiv.appendChild(fileNameInput);
         newFileDiv.appendChild(fileInput);
+        newFileDiv.appendChild(progressBar);
 
         // Insert the new div after the first div with the class 'single__file__uploaded'
-        fileUploadDiv.insertBefore(newFileDiv, fileUploadDiv.children[1]);
+        fileUploadDiv.appendChild(newFileDiv);
+    };
+
+    function showProgress(event) {
+        const fileInput = event.target;
+        const container = fileInput.closest('.single__file__uploaded');
+        if (!container) {
+            console.error('Container element not found.');
+            return;
+        }
+
+        const progress = container.querySelector('progress');
+        const status = container.querySelector('.ariel');
+
+        if (!progress || !status) {
+            console.error('Progress bar or status element not found in the container.');
+            return;
+        }
+
+        progress.style.display = 'block';
+        status.style.display = 'block';
+
+        const file = fileInput.files[0];
+
+        const reader = new FileReader();
+
+        reader.onloadstart = function () {
+            progress.value = 0;
+            status.innerText = 'Loading...';
+        };
+
+        reader.onprogress = function (event) {
+            if (event.lengthComputable) {
+                const percentLoaded = Math.round((event.loaded / event.total) * 100);
+                progress.value = percentLoaded;
+                status.innerText = `${percentLoaded}%`;
+            }
+        };
+
+        reader.onloadend = function () {
+            progress.value = 100;
+            status.innerText = 'Loaded';
+        };
+
+        reader.readAsDataURL(file);
     }
 
 

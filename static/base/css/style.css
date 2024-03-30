@@ -350,6 +350,24 @@ nav{
     margin: 1rem 0;
 }
 
+[id^='fileProgress']{
+    width: 100%;
+    border: none;
+}
+[id^='fileProgress']::-webkit-progress-bar{
+    background-color: var(--lgrey-color);
+    border-radius: 10rem;
+}
+[id^='fileProgress']::-webkit-progress-value{
+    background-color: green;
+    border-radius: 10rem;
+}
+
+[id^='progressStatus']{
+    font-weight: 900;
+    color: var(--green-color);
+}
+
 
 
 
