@@ -3,7 +3,7 @@ from django.db import models
 import os
 
 class User(AbstractUser):
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True, default='profile_pictures/default_pp.png')
     email = models.EmailField(unique=True)
     user_title = models.CharField(max_length=100, blank=True)
     user_bio = models.TextField(blank=True)
@@ -31,46 +31,52 @@ class User(AbstractUser):
     
 
 class Specialty(models.Model):
+    # user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='SpecialtyUser', blank=False)
     title = models.CharField(max_length=100)
-    short_description = models.TextField()
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
 
 class Expertise(models.Model):
+    # user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='ExpertiseUser', blank=False)
     title = models.CharField(max_length=100)
-    short_description = models.TextField()
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
 
 class Education(models.Model):
+    # user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='EducationUser', blank=False)
     title = models.CharField(max_length=100)
-    starting_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
 
 class HonorsAndAwards(models.Model):
+    # user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='HonorsAndAwardsUser', blank=False)
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
 
 class Affiliation(models.Model):
+    # user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='AffiliationUser', blank=False)
+
     title = models.CharField(max_length=100)
-    institution_name = models.ForeignKey('Institution', related_name='affiliation', blank=True, on_delete=models.CASCADE)
-    location = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+
+    institution_name = models.ForeignKey('Institution', related_name='affiliation', blank=True, on_delete=models.CASCADE, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
     CURRENT = 'Current'
     PAST = 'Past'
     STATE_CHOICES = [
         (CURRENT, 'Current'),
         (PAST, 'Past'),
     ]
-    state = models.CharField(max_length=20, choices=STATE_CHOICES)
+    state = models.CharField(max_length=20, choices=STATE_CHOICES, blank=True, null=True)
 
 
     def __str__(self) -> str:

@@ -15,6 +15,15 @@
     enctype="multipart/form-data">
     {% csrf_token %}
 
+<div class="text-center d-flex flex-column align-items-center justify-content-center">
+
+    <img id="profile__p__edit" class="rounded-circle" src="{{ request.user.profile_picture.url }}" alt="">
+    <button type="button" id="changeProfileBtn" class="btn btn-sm btn-warning my-2">Change Profile</button>
+    <h6 class="fst-italic my-4 btn btn-success rounded-pill">{{request.user.email}}</h6>
+
+    <input type="file" id="profilePictureInput" style="display: none;" accept="image/*">
+</div>
+
 
     <div class="row">
         <div class="col">
@@ -108,20 +117,20 @@
                 <div class="form-floating mb-3">
 
 
-                    <input value="{{specialty.title}}" type="text" id="specialty_{{forloop.counter}}"
-                        name="specialty_{{forloop.counter}}" class="form-control"
+                    <input value="{{specialty.title}}" type="text" id="specialty{{forloop.counter}}"
+                        name="specialty{{forloop.counter}}" class="form-control"
                         placeholder="Specialty {{forloop.counter}}">
 
-                    <label for="specialty_{{forloop.counter}}">Specialty {{forloop.counter}}</label>
+                    <label for="specialty{{forloop.counter}}">Specialty {{forloop.counter}}</label>
 
                 </div>
 
                 <div class="form-floating mb-3">
-                    <textarea id="specialty_desc_{{forloop.counter}}" name="specialty_desc_{{forloop.counter}}"
+                    <textarea id="specialtydesc{{forloop.counter}}" name="specialtydesc{{forloop.counter}}"
                         class="form-control my-2" style="height: 200px;"
                         placeholder="Short Description">{{specialty.short_description}}</textarea>
 
-                    <label for="specialty_desc_{{forloop.counter}}">Short Description</label>
+                    <label for="specialtydesc{{forloop.counter}}">Short Description</label>
                 </div>
             </div>
             {% endfor %}
@@ -197,6 +206,39 @@
 </form>
 <script>
 
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get necessary elements
+        const profilePictureEdit = document.getElementById("profile__p__edit");
+        const changeProfileBtn = document.getElementById("changeProfileBtn");
+        const profilePictureInput = document.getElementById("profilePictureInput");
+
+        // Add click event listener to the button
+        changeProfileBtn.addEventListener("click", function () {
+            // Trigger file input when the button is clicked
+            profilePictureInput.click();
+        });
+
+        // Add change event listener to the file input
+        profilePictureInput.addEventListener("change", function () {
+            const file = this.files[0]; // Get the selected file
+
+            if (file) {
+                // If a file is selected, display it in the image tag
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    profilePictureEdit.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+            // If no file is selected, do nothing and retain the previous image
+        });
+    });
+
+
+
     function validateUrl(element) {
         // Extract URL value from the input element
         var url = element.value;
@@ -242,7 +284,7 @@
     function createPacker(formDiv, formDivDesc, formIndex, name) {
         formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name} ${formIndex}`);
 
-        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}_desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`);
+        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`);
     }
 
     function createTextAreawithLabel(id, className, placeholder, height) {
@@ -306,11 +348,8 @@
             createPacker(formDiv, formDivDesc, formIndex, 'Education')
         } else if (what == 'haa') {
             createPacker(formDiv, formDivDesc, formIndex, 'Honour and Awards')
-
         } else if (what == 'spe') {
-
             createPacker(formDiv, formDivDesc, formIndex, 'Specialty')
-
         }
 
 

@@ -376,6 +376,11 @@ nav{
     display: block !important;
 }
 
+#profile__p__edit{
+    width: 10rem;
+    height: 10rem;
+}
+
 
 
 textarea:focus,
