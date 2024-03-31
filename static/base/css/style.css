@@ -405,9 +405,19 @@ nav{
 }
 
 .other__details [class^="user__"]{
-    background-color: #edfffc;
+    background-color: #edf7ff;
     padding: 2rem 1rem;
     border-radius: 1rem;
+}
+.other__details [class^="user__"] h1{
+    transition: margin 2s ease-in;
+}
+.other__details [class^="user__"]:hover{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.other__details [class^="user__"]:hover h1{
+    margin: 0 3rem;
 }
 
 textarea:focus,

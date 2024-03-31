@@ -13,7 +13,7 @@
 <div class="first_profile_encloser">
     <div class="profile__details d-flex">
     <img class="pp" src="{{user.profile_picture.url}}" alt="">
-    <div class="name_det mx-2">
+    <div class="name_det mx-5">
         {% if user.first_name or user.last_name %}
         <h1 class="fw-bold my-0">{{user.first_name}} {{user.last_name}}</h1>
         {% else %}
@@ -21,11 +21,11 @@
         {% endif%}
 
         <small class="my-0">{{user.user_title}}</small>
-        <div class="icon_pack_social w-25 d-flex justify-content-between">
-          <a href=""><i class="text-secondary fa fa-facebook"></i></a>
-          <a href=""><i class="text-secondary fa fa-linkedin"></i></a>
-          <a href=""><i class="text-secondary fa fa-twitter"></i></a>
-          <a href=""><i class="text-secondary fa fa-instagram"></i></a>
+        <div class="icon_pack_social d-flex">
+          <a href=""><i class="mx-2 text-secondary fa fa-facebook"></i></a>
+          <a href=""><i class="mx-2 text-secondary fa fa-linkedin"></i></a>
+          <a href=""><i class="mx-2 text-secondary fa fa-twitter"></i></a>
+          <a href=""><i class="mx-2 text-secondary fa fa-instagram"></i></a>
         </div>
     </div>
 </div>
