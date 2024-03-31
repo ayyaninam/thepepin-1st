@@ -11,9 +11,11 @@
 {% endif %}
 
 
-<form method="post" novalidate class="w-50 mx-auto" action="{% url 'user_profile_edit_view' %}"
+<form method="post" novalidate class="user__edit__form row justify-content-between mx-auto w-100" action="{% url 'user_profile_edit_view' %}"
     enctype="multipart/form-data">
     {% csrf_token %}
+
+    <div class="user_left_details col col-12 col-md-5 col-xxl-4">
 
     <div class="text-center d-flex flex-column align-items-center justify-content-center">
         {% if request.user.profile_picture %}
@@ -22,14 +24,12 @@
         <img id="profile__p__edit" class="rounded-circle" src="{% static 'base/images/default_pp.png' %}" alt="">
         {% endif %}
         <button type="button" id="changeProfileBtn" class="btn btn-sm btn-warning my-2">Change Profile</button>
-        <h6 class="fst-italic my-4 btn btn-success rounded-pill">{{request.user.email}}</h6>
+        <h6 class="fst-italic my-4 btn btn-light rounded-pill">{{request.user.email}}</h6>
 
-        <input type="file" id="profilePictureInput" style="display: none;" accept="image/*">
+        <input type="file" name="profilePictureInput" id="profilePictureInput" style="display: none;" accept="image/*">
     </div>
 
 
-    <div class="row">
-        <div class="col">
 
 
             <div class="form-floating mb-3">
@@ -39,11 +39,9 @@
             </div>
 
 
-        </div>
 
 
 
-        <div class="col">
 
 
             <div class="form-floating mb-3">
@@ -52,8 +50,6 @@
                 <label for="last_name">Last Name</label>
             </div>
 
-        </div>
-    </div>
 
     <div class="form-floating mb-3">
         <input value="{{request.user.user_title}}" type="text" id="user_title" name="user_title" class="form-control"
@@ -70,46 +66,35 @@
     </div>
 
 
-    <div class="row">
 
-        <div class="col">
             <div class="form-floating mb-3">
                 <input value="{{request.user.facebook_link}}" type="text" onChange="validateUrl(this)"
                     id="facebook_link" name="facebook_link" class="form-control" placeholder="facebook Link">
                 <label for="facebook_link">Facebook url</label>
             </div>
-        </div>
-        <div class="col">
 
             <div class="form-floating mb-3">
                 <input value="{{request.user.twitter_link}}" type="text" onChange="validateUrl(this)" id="twitter_link"
                     name="twitter_link" class="form-control" placeholder="twitter Link">
                 <label for="twitter_link">Twitter url</label>
             </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col">
+
             <div class="form-floating mb-3">
                 <input value="{{request.user.linkedin_link}}" type="text" onChange="validateUrl(this)"
                     id="linkedin_link" name="linkedin_link" class="form-control" placeholder="linkedin Link">
                 <label for="linkedin_link">Linkedin url</label>
             </div>
-        </div>
-        <div class="col">
 
             <div class="form-floating mb-3">
                 <input value="{{request.user.instagram_link}}" type="text" onChange="validateUrl(this)"
                     id="instagram_link" name="instagram_link" class="form-control" placeholder="instagram Link">
                 <label for="instagram_link">Instagram url</label>
             </div>
-        </div>
-    </div>
 
 
-
-
+</div>
+<div class="col col-12 col-md-7 col-xxl-7">
     <div class="specialty_tag my-4">
         <h1 class="fw-bold">Your Specialties</h1>
         <hr>
@@ -142,7 +127,7 @@
 
         </div>
 
-        <button id="spe__button" onclick="addBtnClicked(this, 'spe')" class="mx-auto d-flex btn btn-sm btn-success"
+        <button id="spe__button" onclick="addBtnClicked(this, 'spe')" class=" d-flex btn btn-sm btn-success"
             type="button">Add
             Specialty</button>
 
@@ -157,7 +142,7 @@
 
         </div>
 
-        <button id="exp__button" onclick="addBtnClicked(this, 'exp')" class="mx-auto d-flex btn btn-sm btn-success"
+        <button id="exp__button" onclick="addBtnClicked(this, 'exp')" class=" d-flex btn btn-sm btn-success"
             type="button">Add
             Expertise</button>
 
@@ -172,7 +157,7 @@
 
         </div>
 
-        <button id="edu__button" onclick="addBtnClicked(this, 'edu')" class="mx-auto d-flex btn btn-sm btn-success"
+        <button id="edu__button" onclick="addBtnClicked(this, 'edu')" class="d-flex btn btn-sm btn-success"
             type="button">Add
             Education</button>
 
@@ -187,7 +172,7 @@
 
         </div>
 
-        <button id="aff__button" onclick="addBtnClicked(this, 'aff')" class="mx-auto d-flex btn btn-sm btn-success"
+        <button id="aff__button" onclick="addBtnClicked(this, 'aff')" class=" d-flex btn btn-sm btn-success"
             type="button">Add
             Affiliation</button>
     </div>
@@ -201,13 +186,13 @@
 
         </div>
 
-        <button id="haa__button" onclick="addBtnClicked(this, 'haa')" class="mx-auto d-flex btn btn-sm btn-success"
+        <button id="haa__button" onclick="addBtnClicked(this, 'haa')" class=" d-flex btn btn-sm btn-success"
             type="button">Add
             Honour and Awards</button>
     </div>
 
 
-
+</div>
 
 
 
@@ -262,6 +247,15 @@
 
 <script>
 
+function generateRandom16DigitNumber() {
+    let randomNumber = '';
+    for (let i = 0; i < 5; i++) {
+        randomNumber += Math.floor(Math.random() * 10);
+    }
+    return randomNumber;
+};
+
+
 
     document.addEventListener("DOMContentLoaded", function () {
         profileShifter();
@@ -281,10 +275,8 @@
 
 
     function already_feilds_mapper(id_of_elems, short_name) {
-        console.log(short_name)
         var specialties = document.querySelector(`#${id_of_elems}`).querySelectorAll('.item');
 
-        console.log(specialties)
 
         specialties.forEach(element => {
             let name = element.getAttribute('data-item-name');
@@ -366,7 +358,7 @@
     }
 
     function createPacker(formDiv, formDivDesc, formIndex, name, inputinnerText, textareaInnerText) {
-        formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name} ${formIndex}`, inputinnerText);
+        formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name}`, inputinnerText);
 
         formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`, textareaInnerText);
     }
@@ -385,7 +377,7 @@
         textarea.style.height = "200px";
         textarea.placeholder = "Short Description";
         textarea.value = "Initial value for the textarea";
-        textarea.innerText = innerText
+        innerText && (textarea.innerText = innerText)
 
         form.appendChild(textarea);
         form.appendChild(label);
@@ -403,7 +395,7 @@
         input.name = id;
         input.className = "form-control my-2";
         input.placeholder = placeholder;
-        input.setAttribute('value', innerText)
+        innerText && (input.setAttribute('value', innerText))
 
         form.appendChild(input);
         form.appendChild(label);
@@ -414,7 +406,7 @@
         if (ele === null) {
             ele = document.getElementById(`${what}__button`)
         }
-        const formIndex = ele.parentNode.querySelectorAll('.all_listing>div').length + 1
+        const formIndex = ele.parentNode.querySelectorAll('.all_listing>div').length + 1  + generateRandom16DigitNumber()
         const formDiv = document.createElement('div');
         formDiv.className = 'form-floating mb-3';
         formDiv.id = `form_${formIndex}`;
@@ -436,18 +428,27 @@
         }
 
         let single_div = document.createElement('div');
+        var hrelem = document.createElement('hr');
         single_div.className = 'single';
         let delBtn = document.createElement('button');
-        delBtn.className = 'btn btn-danger';
-        // delBtn.innerHTML = ''
+        delBtn.className = 'my-2 btn btn-danger btn-sm d-flex mx-auto';
+        delBtn.innerHTML = '<i class="fa fa-trash-o"></i>'
+        delBtn.addEventListener('click', function (e) {
+            packerDeleter(e, this)
+        });
 
         single_div.appendChild(formDiv)
         single_div.appendChild(formDivDesc)
+        single_div.appendChild(delBtn)
+        single_div.appendChild(hrelem)
 
         ele.parentNode.querySelectorAll('.all_listing')[0].appendChild(single_div)
 
     };
 
-
+    function packerDeleter(e, elem){
+        e.preventDefault();
+        elem.parentNode.remove()
+    }
 </script>
 {% endblock content %}

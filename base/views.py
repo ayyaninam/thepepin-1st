@@ -4,7 +4,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout, authenticate
 
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from base.models import * 
 from django.urls import reverse
 from base.forms import *
@@ -101,7 +101,16 @@ def logout_view(request):
 
 
 
-
+def profile_view(request, id):
+    try:
+        user = User.objects.get(id=id)
+    except:
+        messages.error(request, "No Profile Found")
+        return render(request, 'base/profile_view.html')
+    context = {
+        'user':user
+    }
+    return render(request, 'base/profile_view.html')
 
 @login_required
 def create_article_view(request):
@@ -220,6 +229,7 @@ def create_article_view(request):
 @login_required
 def user_profile_edit_view(request):
     if request.method == 'POST':
+        user = request.user
         # print(request.POST)
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
@@ -230,14 +240,21 @@ def user_profile_edit_view(request):
         linkedin_link = request.POST.get('linkedin_link',None)
         instagram_link = request.POST.get('instagram_link',None)
 
-        request.user.update(first_name = first_name) if request.user.first_name != first_name else None
-        request.user.update(last_name = last_name) if request.user.last_name != last_name else None
-        request.user.update(user_title = user_title) if request.user.user_title != user_title else None
-        request.user.update(user_bio = user_bio) if request.user.user_bio != user_bio else None
-        request.user.update(facebook_link = facebook_link) if request.user.facebook_link != facebook_link else None
-        request.user.update(twitter_link = twitter_link) if request.user.twitter_link != twitter_link else None
-        request.user.update(linkedin_link = linkedin_link) if request.user.linkedin_link != linkedin_link else None
-        request.user.update(instagram_link = instagram_link) if request.user.instagram_link != instagram_link else None
+        user.first_name = first_name
+        user.last_name = last_name
+        user.user_title = user_title
+        user.user_bio = user_bio
+        user.facebook_link = facebook_link
+        user.twitter_link = twitter_link
+        user.linkedin_link = linkedin_link
+        user.instagram_link = instagram_link
+
+
+
+
+
+
+
 
         filtered_keys = set()
         prefixes = ['specialty', 'education', 'expertise', 'affiliation', 'honourandawards']
@@ -253,35 +270,49 @@ def user_profile_edit_view(request):
         filtered_keys_list = list(filtered_keys)
 
 
-                
+        user.specialty.all().delete()
+        user.education.all().delete()
+        user.expertise.all().delete()
+        user.affiliations.all().delete()
+        user.honors_and_awards.all().delete()
+
         for value in filtered_keys_list:
             key = int(''.join(filter(str.isdigit, value)))
 
             if (value.startswith('specialty')):
-                request.user.specialty.create(
+                user.specialty.create(
                     title=request.POST.get(f'specialty{key}', None),
                     description=request.POST.get(f'specialtydesc_{key}', None)
                     )
             elif (value.startswith('education')):
-                request.user.education.create(
+                user.education.create(
                     title=request.POST.get(f'education{key}', None),
                     description=request.POST.get(f'educationdesc_{key}', None)
                     )
             elif (value.startswith('expertise')):
-                request.user.expertise.create(
+                user.expertise.create(
                     title=request.POST.get(f'expertise{key}', None),
                     description=request.POST.get(f'expertisedesc_{key}', None)
                     )
             elif (value.startswith('affiliation')):
-                request.user.affiliations.create(
+                user.affiliations.create(
                     title=request.POST.get(f'affiliation{key}', None),
                     description=request.POST.get(f'affiliationdesc_{key}', None)
                     )
             elif (value.startswith('honourandawards')):
-                request.user.honors_and_awards.create(
+                user.honors_and_awards.create(
                     title=request.POST.get(f'honourandawards{key}', None),
                     description=request.POST.get(f'honourandawardsdesc_{key}', None)
                     )
+
+        profile_picture = request.FILES.get('profilePictureInput', None)
+
+        if profile_picture:
+            user.profile_picture=profile_picture
+
+        user.save()
+
+        return HttpResponseRedirect(request.path_info)
 
 
     return render(request, 'base/user_profile_edit.html')

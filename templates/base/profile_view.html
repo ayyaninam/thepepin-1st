@@ -1,0 +1,117 @@
+{% extends "base/base.html" %}
+{% block content %}
+  <div class="profile_view w-75 mx-auto">
+    {% csrf_token %}
+    {% if messages %}
+    <ul class="errorlist">
+        {% for message in messages %}
+        <button class="rounded btn btn-danger mx-auto d-flex">{{ message }}</button>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="first_profile_encloser">
+    <div class="profile__details d-flex">
+    <img class="pp" src="{{user.profile_picture.url}}" alt="">
+    <div class="name_det mx-2">
+        {% if user.first_name or user.last_name %}
+        <h1 class="fw-bold my-0">{{user.first_name}} {{user.last_name}}</h1>
+        {% else %}
+        <h1 class="fw-bold my-0">{{user.email}}</h1>
+        {% endif%}
+
+        <small class="my-0">{{user.user_title}}</small>
+        <div class="icon_pack_social w-25 d-flex justify-content-between">
+          <a href=""><i class="text-secondary fa fa-facebook"></i></a>
+          <a href=""><i class="text-secondary fa fa-linkedin"></i></a>
+          <a href=""><i class="text-secondary fa fa-twitter"></i></a>
+          <a href=""><i class="text-secondary fa fa-instagram"></i></a>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="other__details my-5">
+<div class="user__bio">
+    <h1 class="fw-bold text-secondary my-0">User Bio</h1>
+    <hr class="w-75 mt-0 mb-4">
+    <p >{{user.user_bio}}</p>
+</div>
+<div class="user__spec my-5">
+    <h1 class="fw-bold text-secondary my-0">Specialties</h1>
+    <hr class="w-75 mt-0 mb-4">
+    {% if user.specialty.all %}
+    {% for specialty in user.specialty.all %}
+      <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
+      <p>{{specialty.description}}</p>
+      <hr class="w-25">
+    {% endfor %}
+    {% else %}
+    <p class="text-danger">No record Found!</p>
+    {% endif %}
+</div>
+
+
+<div class="user__exp my-5">
+    <h1 class="fw-bold text-secondary my-0">Expertise</h1>
+    <hr class="w-75 mt-0 mb-4">
+    {% if user.expertise.all %}
+    {% for specialty in user.expertise.all %}
+      <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
+      <p>{{specialty.description}}</p>
+      <hr class="w-25">
+    {% endfor %}
+    {% else %}
+    <p class="text-danger">No record Found!</p>
+    {% endif %}
+</div>
+
+<div class="user__edu my-5">
+    <h1 class="fw-bold text-secondary my-0">Education</h1>
+    <hr class="w-75 mt-0 mb-4">
+    {% if user.education.all %}
+    {% for specialty in user.education.all %}
+      <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
+      <p>{{specialty.description}}</p>
+      <hr class="w-25">
+    {% endfor %}
+    {% else %}
+    <p class="text-danger">No record Found!</p>
+    {% endif %}
+</div>
+
+<div class="user__aff my-5">
+    <h1 class="fw-bold text-secondary my-0">Affiliations</h1>
+    <hr class="w-75 mt-0 mb-4">
+    {% if user.affiliations.all %}
+    {% for specialty in user.affiliations.all %}
+      <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
+      <p>{{specialty.description}}</p>
+      <hr class="w-25">
+    {% endfor %}
+    {% else %}
+    <p class="text-danger">No record Found!</p>
+    {% endif %}
+</div>
+
+
+<div class="user__haa my-5">
+    <h1 class="fw-bold text-secondary my-0">Honors and Awards</h1>
+    <hr class="w-75 mt-0 mb-4">
+    {% if user.honors_and_awards.all %}
+    {% for specialty in user.honors_and_awards.all %}
+      <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
+      <p>{{specialty.description}}</p>
+      <hr class="w-25">
+    {% endfor %}
+    {% else %}
+    <p class="text-danger">No record Found!</p>
+    {% endif %}
+</div>
+
+
+</div>
+
+  </div>
+{% endblock content %}

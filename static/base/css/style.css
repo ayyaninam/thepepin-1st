@@ -380,8 +380,35 @@ nav{
     width: 10rem;
     height: 10rem;
 }
+.user__edit__form{
+    max-width: 90%;
+}
+.user__edit__form .user_left_details{
+    background: #edfffc;
+    padding: 3rem 1rem;
+    margin: 2rem 0;
+    border-radius: 2rem;
+    height: max-content;
+}
+.user__edit__form .user_left_details input,
+.user__edit__form .user_left_details textarea
+{
 
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.70);
+}
 
+.first_profile_encloser .pp{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 100rem;
+}
+
+.other__details [class^="user__"]{
+    background-color: #edfffc;
+    padding: 2rem 1rem;
+    border-radius: 1rem;
+}
 
 textarea:focus,
 input[type="text"]:focus,

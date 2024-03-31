@@ -9,6 +9,7 @@
     <a class="btn active rounded-pill" href="{% url 'create_article_view' %}">Submit your Article</a>
     {% if user.is_authenticated %}
         <a class="btn active rounded-pill" href="{% url 'user_profile_edit_view' %}">Edit Profile</a>
+        <a class="btn active rounded-pill" href="{% url 'profile_view' request.user.id %}">Profile</a>
     {% endif %}
 </div>
 <div class="right">
