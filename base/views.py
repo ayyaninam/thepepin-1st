@@ -41,6 +41,10 @@ def article_view(request, id):
 
     try:
         article = get_object_or_404(Article, id=id)
+        article.views = article.views + 1
+        if not article.user == request.user:
+            article.user.publication_views = article.user.publication_views + 1
+        article.save()
         latest_articles = Article.objects.all().order_by('-published_date')
     except Http404:
         # Handle the 404 error here, such as rendering a custom 404 page
@@ -104,9 +108,14 @@ def logout_view(request):
 def profile_view(request, id):
     try:
         user = User.objects.get(id=id)
+        if not user == request.user:
+            user.profile_views = user.profile_views + 1
+        user.save()
+
     except:
         messages.error(request, "No Profile Found")
         return render(request, 'base/profile_view.html')
+    
     context = {
         'user':user
     }
@@ -215,6 +224,8 @@ def create_article_view(request):
         created_article.resources.add(*created_resource_ids)
         created_article.keywords.add(*created_keyword_ids)
         created_article.save()
+        request.user.total_publications = request.user.total_publications+1
+        request.user.save()
     
     
     else:
