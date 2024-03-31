@@ -1,5 +1,5 @@
 {% extends "base/base.html" %}
-
+{% load static %}
 {% block content %}
 
 {% if messages %}
@@ -16,8 +16,11 @@
     {% csrf_token %}
 
 <div class="text-center d-flex flex-column align-items-center justify-content-center">
-
+    {% if request.user.profile_picture %}
     <img id="profile__p__edit" class="rounded-circle" src="{{ request.user.profile_picture.url }}" alt="">
+    {% else %}
+    <img id="profile__p__edit" class="rounded-circle" src="{% static 'base/images/default_pp.png' %}" alt="">
+    {% endif %}
     <button type="button" id="changeProfileBtn" class="btn btn-sm btn-warning my-2">Change Profile</button>
     <h6 class="fst-italic my-4 btn btn-success rounded-pill">{{request.user.email}}</h6>
 
