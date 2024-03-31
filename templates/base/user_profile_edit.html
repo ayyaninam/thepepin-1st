@@ -15,17 +15,17 @@
     enctype="multipart/form-data">
     {% csrf_token %}
 
-<div class="text-center d-flex flex-column align-items-center justify-content-center">
-    {% if request.user.profile_picture %}
-    <img id="profile__p__edit" class="rounded-circle" src="{{ request.user.profile_picture.url }}" alt="">
-    {% else %}
-    <img id="profile__p__edit" class="rounded-circle" src="{% static 'base/images/default_pp.png' %}" alt="">
-    {% endif %}
-    <button type="button" id="changeProfileBtn" class="btn btn-sm btn-warning my-2">Change Profile</button>
-    <h6 class="fst-italic my-4 btn btn-success rounded-pill">{{request.user.email}}</h6>
+    <div class="text-center d-flex flex-column align-items-center justify-content-center">
+        {% if request.user.profile_picture %}
+        <img id="profile__p__edit" class="rounded-circle" src="{{ request.user.profile_picture.url }}" alt="">
+        {% else %}
+        <img id="profile__p__edit" class="rounded-circle" src="{% static 'base/images/default_pp.png' %}" alt="">
+        {% endif %}
+        <button type="button" id="changeProfileBtn" class="btn btn-sm btn-warning my-2">Change Profile</button>
+        <h6 class="fst-italic my-4 btn btn-success rounded-pill">{{request.user.email}}</h6>
 
-    <input type="file" id="profilePictureInput" style="display: none;" accept="image/*">
-</div>
+        <input type="file" id="profilePictureInput" style="display: none;" accept="image/*">
+    </div>
 
 
     <div class="row">
@@ -114,6 +114,7 @@
         <h1 class="fw-bold">Your Specialties</h1>
         <hr>
         <div class="all_specialty all_listing" id="all_specialty">
+            {% comment %}
 
             {% for specialty in request.user.specialty.all %}
             <div class="single">
@@ -129,22 +130,23 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <textarea id="specialtydesc{{forloop.counter}}" name="specialtydesc{{forloop.counter}}"
+                    <textarea id="specialtydesc_{{forloop.counter}}" name="specialtydesc_{{forloop.counter}}"
                         class="form-control my-2" style="height: 200px;"
-                        placeholder="Short Description">{{specialty.short_description}}</textarea>
+                        placeholder="Short Description">{{specialty.description}}</textarea>
 
-                    <label for="specialtydesc{{forloop.counter}}">Short Description</label>
+                    <label for="specialtydesc_{{forloop.counter}}">Short Description</label>
                 </div>
             </div>
             {% endfor %}
+            {% endcomment %}
 
         </div>
 
-        <button onclick="addBtnClicked(this, 'spe')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+        <button id="spe__button" onclick="addBtnClicked(this, 'spe')" class="mx-auto d-flex btn btn-sm btn-success"
+            type="button">Add
             Specialty</button>
 
     </div>
-
 
 
 
@@ -155,7 +157,8 @@
 
         </div>
 
-        <button onclick="addBtnClicked(this, 'exp')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+        <button id="exp__button" onclick="addBtnClicked(this, 'exp')" class="mx-auto d-flex btn btn-sm btn-success"
+            type="button">Add
             Expertise</button>
 
     </div>
@@ -169,7 +172,8 @@
 
         </div>
 
-        <button onclick="addBtnClicked(this, 'edu')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+        <button id="edu__button" onclick="addBtnClicked(this, 'edu')" class="mx-auto d-flex btn btn-sm btn-success"
+            type="button">Add
             Education</button>
 
     </div>
@@ -183,7 +187,8 @@
 
         </div>
 
-        <button onclick="addBtnClicked(this, 'aff')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+        <button id="aff__button" onclick="addBtnClicked(this, 'aff')" class="mx-auto d-flex btn btn-sm btn-success"
+            type="button">Add
             Affiliation</button>
     </div>
 
@@ -196,7 +201,8 @@
 
         </div>
 
-        <button onclick="addBtnClicked(this, 'haa')" class="mx-auto d-flex btn btn-sm btn-success" type="button">Add
+        <button id="haa__button" onclick="addBtnClicked(this, 'haa')" class="mx-auto d-flex btn btn-sm btn-success"
+            type="button">Add
             Honour and Awards</button>
     </div>
 
@@ -207,11 +213,88 @@
 
     <button class="btn btn-primary" id="save__profile__change" type="submit">Save</button>
 </form>
+
+<div class="hidden">
+    <!-- formDiv, formDivDesc, formIndex, name, inputinnerText=null, textareaInnerText=null -->
+
+    <div id="all_speciailties__need_to_map_dj">
+        {% for specialty in request.user.specialty.all %}
+        <div class="item" data-item-name="Specialty" data-item-input-inner-text="{{ specialty.title }}"
+            data-item-textarea-inner-text="{{ specialty.description }}"></div>
+        {% endfor %}
+    </div>
+
+
+    
+    <div id="all_education__need_to_map_dj">
+        {% for specialty in request.user.education.all %}
+        <div class="item" data-item-name="Education" data-item-input-inner-text="{{ specialty.title }}"
+            data-item-textarea-inner-text="{{ specialty.description }}"></div>
+        {% endfor %}
+    </div>
+
+
+
+    <div id="all_expertise__need_to_map_dj">
+        {% for specialty in request.user.expertise.all %}
+        <div class="item" data-item-name="Expertise" data-item-input-inner-text="{{ specialty.title }}"
+            data-item-textarea-inner-text="{{ specialty.description }}"></div>
+        {% endfor %}
+    </div>
+
+    <div id="all_affiliation__need_to_map_dj">
+        {% for specialty in request.user.affiliations.all %}
+        <div class="item" data-item-name="Affiliation" data-item-input-inner-text="{{ specialty.title }}"
+            data-item-textarea-inner-text="{{ specialty.description }}"></div>
+        {% endfor %}
+    </div>
+
+    <div id="all_haa__need_to_map_dj">
+        {% for specialty in request.user.honors_and_awards.all %}
+        <div class="item" data-item-name="Honors and Awards" data-item-input-inner-text="{{ specialty.title }}"
+            data-item-textarea-inner-text="{{ specialty.description }}"></div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+
 <script>
 
 
     document.addEventListener("DOMContentLoaded", function () {
-        // Get necessary elements
+        profileShifter();
+        const toScrape = {
+            'all_speciailties__need_to_map_dj': 'spe',
+            'all_education__need_to_map_dj': 'edu',
+            'all_expertise__need_to_map_dj': 'exp',
+            'all_affiliation__need_to_map_dj': 'aff',
+            'all_haa__need_to_map_dj': 'haa',
+        };
+        for (let key in toScrape) {
+            already_feilds_mapper(key, toScrape[key]);
+        };
+
+    });
+
+
+
+    function already_feilds_mapper(id_of_elems, short_name) {
+        console.log(short_name)
+        var specialties = document.querySelector(`#${id_of_elems}`).querySelectorAll('.item');
+
+        console.log(specialties)
+
+        specialties.forEach(element => {
+            let name = element.getAttribute('data-item-name');
+            let inputText = element.getAttribute('data-item-input-inner-text');
+            let textareaText = element.getAttribute('data-item-textarea-inner-text');
+            addBtnClicked(null, short_name, inputText, textareaText)
+        });
+    }
+
+    function profileShifter() {
         const profilePictureEdit = document.getElementById("profile__p__edit");
         const changeProfileBtn = document.getElementById("changeProfileBtn");
         const profilePictureInput = document.getElementById("profilePictureInput");
@@ -238,9 +321,7 @@
             }
             // If no file is selected, do nothing and retain the previous image
         });
-    });
-
-
+    }
 
     function validateUrl(element) {
         // Extract URL value from the input element
@@ -284,13 +365,13 @@
         return isValid;
     }
 
-    function createPacker(formDiv, formDivDesc, formIndex, name) {
-        formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name} ${formIndex}`);
+    function createPacker(formDiv, formDivDesc, formIndex, name, inputinnerText, textareaInnerText) {
+        formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name} ${formIndex}`, inputinnerText);
 
-        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`);
+        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`, textareaInnerText);
     }
 
-    function createTextAreawithLabel(id, className, placeholder, height) {
+    function createTextAreawithLabel(id, className, placeholder, height, innerText) {
         var form = document.createElement("div")
         form.className = "form-floating mb-3"
         var label = document.createElement("label")
@@ -304,13 +385,13 @@
         textarea.style.height = "200px";
         textarea.placeholder = "Short Description";
         textarea.value = "Initial value for the textarea";
+        textarea.innerText = innerText
 
         form.appendChild(textarea);
         form.appendChild(label);
         return form.innerHTML;
     }
-    function createInputwithLabel(id, className, placeholder) {
-
+    function createInputwithLabel(id, className, placeholder, innerText) {
         var form = document.createElement("div")
         form.className = "form-floating mb-3"
         var label = document.createElement("label")
@@ -322,16 +403,18 @@
         input.name = id;
         input.className = "form-control my-2";
         input.placeholder = placeholder;
+        input.setAttribute('value', innerText)
 
         form.appendChild(input);
         form.appendChild(label);
         return form.innerHTML;
     }
 
-    function addBtnClicked(ele, what) {
-        console.log(ele.parentNode.querySelectorAll('.all_listing>div').length)
+    function addBtnClicked(ele, what, inputinnerText, textareaInnerText) {
+        if (ele === null) {
+            ele = document.getElementById(`${what}__button`)
+        }
         const formIndex = ele.parentNode.querySelectorAll('.all_listing>div').length + 1
-
         const formDiv = document.createElement('div');
         formDiv.className = 'form-floating mb-3';
         formDiv.id = `form_${formIndex}`;
@@ -340,29 +423,31 @@
         formDivDesc.className = 'form-floating mb-3';
         formDivDesc.id = `form_${formIndex}`;
 
-
-
-
         if (what == 'aff') {
-            createPacker(formDiv, formDivDesc, formIndex, 'Affiliation')
+            createPacker(formDiv, formDivDesc, formIndex, 'Affiliation', inputinnerText, textareaInnerText)
         } else if (what == 'exp') {
-            createPacker(formDiv, formDivDesc, formIndex, 'Expertise')
+            createPacker(formDiv, formDivDesc, formIndex, 'Expertise', inputinnerText, textareaInnerText)
         } else if (what == 'edu') {
-            createPacker(formDiv, formDivDesc, formIndex, 'Education')
+            createPacker(formDiv, formDivDesc, formIndex, 'Education', inputinnerText, textareaInnerText)
         } else if (what == 'haa') {
-            createPacker(formDiv, formDivDesc, formIndex, 'Honour and Awards')
+            createPacker(formDiv, formDivDesc, formIndex, 'Honour and Awards', inputinnerText, textareaInnerText)
         } else if (what == 'spe') {
-            createPacker(formDiv, formDivDesc, formIndex, 'Specialty')
+            createPacker(formDiv, formDivDesc, formIndex, 'Specialty', inputinnerText, textareaInnerText)
         }
-
 
         let single_div = document.createElement('div');
         single_div.className = 'single';
+        let delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-danger';
+        // delBtn.innerHTML = ''
+
         single_div.appendChild(formDiv)
         single_div.appendChild(formDivDesc)
 
         ele.parentNode.querySelectorAll('.all_listing')[0].appendChild(single_div)
 
-    }
+    };
+
+
 </script>
 {% endblock content %}

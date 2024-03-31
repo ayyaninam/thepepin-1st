@@ -220,73 +220,68 @@ def create_article_view(request):
 @login_required
 def user_profile_edit_view(request):
     if request.method == 'POST':
+        # print(request.POST)
+        first_name = request.POST.get('first_name',None)
+        last_name = request.POST.get('last_name',None)
+        user_title = request.POST.get('user_title',None)
+        user_bio = request.POST.get('user_bio',None)
+        facebook_link = request.POST.get('facebook_link',None)
+        twitter_link = request.POST.get('twitter_link',None)
+        linkedin_link = request.POST.get('linkedin_link',None)
+        instagram_link = request.POST.get('instagram_link',None)
 
-        specialties = {}
-        education = {}
-        awards_honour = {}
-        expertise = {}
-        affiliation = {}
+        request.user.update(first_name = first_name) if request.user.first_name != first_name else None
+        request.user.update(last_name = last_name) if request.user.last_name != last_name else None
+        request.user.update(user_title = user_title) if request.user.user_title != user_title else None
+        request.user.update(user_bio = user_bio) if request.user.user_bio != user_bio else None
+        request.user.update(facebook_link = facebook_link) if request.user.facebook_link != facebook_link else None
+        request.user.update(twitter_link = twitter_link) if request.user.twitter_link != twitter_link else None
+        request.user.update(linkedin_link = linkedin_link) if request.user.linkedin_link != linkedin_link else None
+        request.user.update(instagram_link = instagram_link) if request.user.instagram_link != instagram_link else None
 
-        # request.user.specialty.create(title="Fake", description="Fake", user=request.user)
-        for key, value in request.POST.items():
-            if key == "first_name":
-                request.user.update(first_name = value) if request.user.first_name != value else None
-            elif key == "last_name":
-                request.user.update(last_name = value) if request.user.last_name != value else None
-            elif key == "user_title":
-                request.user.update(user_title = value) if request.user.user_title != value else None
-            elif key == "user_bio":
-                request.user.update(user_bio = value) if request.user.user_bio != value else None
-            elif key == "facebook_link":
-                request.user.update(facebook_link = value) if request.user.facebook_link != value else None
-            elif key == "twitter_link":
-                request.user.update(twitter_link = value) if request.user.twitter_link != value else None
-            elif key == "linkedin_link":
-                request.user.update(linkedin_link = value) if request.user.linkedin_link != value else None
-            elif key == "instagram_link":
-                request.user.update(instagram_link = value) if request.user.instagram_link != value else None
+        filtered_keys = set()
+        prefixes = ['specialty', 'education', 'expertise', 'affiliation', 'honourandawards']
 
-            elif ((key.startswith("specialty")) and not ('desc_' in key)):
-                specialties.update({value:None})
+        for key in request.POST.keys():
+            if any(key.startswith(prefix) for prefix in prefixes):
+                if "desc_" in key:
+                    original_key = key.replace('desc_', '', 1)
+                    if original_key in filtered_keys:
+                        filtered_keys.discard(original_key)
+                filtered_keys.add(key)
 
-            elif ((key.startswith("specialtydesc_"))):
-                specialties.update({f"specialty{key.split('desc_')[1]}":value})
+        filtered_keys_list = list(filtered_keys)
 
-            elif ((key.startswith("education")) and not ('desc_' in key)):
-                education.update({value:None})
 
-            elif ((key.startswith("educationdesc_"))):
-                education.update({f"education{key.split('desc_')[1]}":value})
+                
+        for value in filtered_keys_list:
+            key = int(''.join(filter(str.isdigit, value)))
 
-            elif ((key.startswith("expertise")) and not ('desc_' in key)):
-                expertise.update({value:None})
+            if (value.startswith('specialty')):
+                request.user.specialty.create(
+                    title=request.POST.get(f'specialty{key}', None),
+                    description=request.POST.get(f'specialtydesc_{key}', None)
+                    )
+            elif (value.startswith('education')):
+                request.user.education.create(
+                    title=request.POST.get(f'education{key}', None),
+                    description=request.POST.get(f'educationdesc_{key}', None)
+                    )
+            elif (value.startswith('expertise')):
+                request.user.expertise.create(
+                    title=request.POST.get(f'expertise{key}', None),
+                    description=request.POST.get(f'expertisedesc_{key}', None)
+                    )
+            elif (value.startswith('affiliation')):
+                request.user.affiliations.create(
+                    title=request.POST.get(f'affiliation{key}', None),
+                    description=request.POST.get(f'affiliationdesc_{key}', None)
+                    )
+            elif (value.startswith('honourandawards')):
+                request.user.honors_and_awards.create(
+                    title=request.POST.get(f'honourandawards{key}', None),
+                    description=request.POST.get(f'honourandawardsdesc_{key}', None)
+                    )
 
-            elif ((key.startswith("expertisedesc_"))):
-                expertise.update({f"expertise{key.split('desc_')[1]}":value})
-
-            elif ((key.startswith("affiliation")) and not ('desc_' in key)):
-                affiliation.update({value:None})
-
-            elif ((key.startswith("affiliationdesc_"))):
-                affiliation.update({f"affiliation{key.split('desc_')[1]}":value})
-
-            elif ((key.startswith("honourandawards")) and not ('desc_' in key)):
-                awards_honour.update({value:None})
-
-            elif ((key.startswith("honourandawardsdesc_"))):
-                awards_honour.update({f"honourandawards{key.split('desc_')[1]}":value})
-
-            for key, value in specialties.items():
-                request.user.specialty.create(title=key, description=value)
-            for key, value in education.items():
-                request.user.education.create(title=key, description=value)
-            for key, value in awards_honour.items():
-                request.user.honors_and_awards.create(title=key, description=value)
-            for key, value in expertise.items():
-                request.user.expertise.create(title=key, description=value)
-            for key, value in affiliation.items():
-                request.user.affiliations.create(title=key, description=value)
-
-# <QueryDict: {'csrfmiddlewaretoken': ['sQTKnO5upgz9BfWDT3NuoCALqQN67y6J2qQeW2Ctk1ONwV6Ogz4B4yYV3bdtHJs9'], 'first_name': ['Ayyan'], 'last_name': ['Inam'], 'user_title': ['Hello World'], 'user_bio': ['HWELLO iaeydsj\r\nEHlasd'], 'facebook_link': ['https://www.facebook.com/'], 'twitter_link': ['https://www.facebook.com/'], 'linkedin_link': ['https://www.facebook.com/'], 'instagram_link': ['https://www.facebook.com/'], 'specialty_1': ['Hello'], 'specialty_desc_1': ['Yes'], 'specialty2': ['sdf'], 'specialty_desc_2': ['sdfsd'], 'specialty3': ['sdf'], 'specialty_desc_3': ['sdf'], 'expertise1': ['sdfs'], 'expertise_desc_1': ['sdf'], 'expertise2': ['sdf'], 'expertise_desc_2': ['sdf'], 'education1': ['sdf'], 'education_desc_1': ['sdf'], 'education2': ['sdf'], 'education_desc_2': ['sdf'], 'affiliation1': ['sdf'], 'affiliation_desc_1': ['sdf'], 'affiliation2': ['sdf'], 'affiliation_desc_2': ['sdf'], 'honourandawards1': ['sdf'], 'honourandawards_desc_1': ['sdf']}>
 
     return render(request, 'base/user_profile_edit.html')
