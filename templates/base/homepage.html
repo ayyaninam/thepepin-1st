@@ -6,8 +6,10 @@
 <span class="fw-bold fs-2 ariel">{{all_articles|length}} Article(s)</span>
 <div class="all_filters mt-3">
     <div class="left_filters">
-        <a class="mx-4 cursor__pointer no_underline border text-dark py-1 px-2 border-dark rounded-pill" href="{% url 'homepage_view' %}?sort=recent">Most Recent</a>
-        <a class="mx-4 cursor__pointer no_underline border text-dark py-1 px-2 border-dark rounded-pill" href="{% url 'homepage_view' %}?sort=viewed">Most viewed</a>
+
+        <a class="btn active rounded-pill" href="{% url 'homepage_view' %}?sort=recent">Most Recent</a>
+
+        <a class="btn active rounded-pill" href="{% url 'homepage_view' %}?sort=viewed">Most viewed</a>
     </div>
 </div>
 
@@ -24,7 +26,7 @@
             {% endfor %}
         </small>
         <small class="my-0 text-muted">{{article.institution}}</small>
-        <hr class="my-2">
+        <hr class="my-2 w-50">
         <small class="my-0">Views: {{article.views}}</small>
     </a>
     {% endfor %}

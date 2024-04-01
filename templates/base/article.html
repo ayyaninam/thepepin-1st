@@ -2,9 +2,9 @@
 {% load customfilters %}
 
 {% block content %}
-<div class="articles_with_side_bar">
+<div class="articles_with_side_bar row mx-auto">
 
-<div class="article__encloser my-5 mx-5">
+<div class="article__encloser col-12 col-md-8 col-xxl-10 p-5">
     <small class="d-block"><span class="text-muted">Type:</span> {{article.article_type}}</small>
     <small class="d-block"><span class="test-muted">Institution:</span> {{article.institution}}</small>
     <h2 class="headline__art_en">{{article.title}}</h2>
@@ -16,8 +16,9 @@
     </div>
     <hr>
     <div class="all__minor__details">
+        {% if article.keywords.all %}
+
         <small class="d-block my-2">
-            {% if article.keywords.all %}
             <b>Keywords:</b>
             <span>
                 &nbsp;
@@ -51,13 +52,16 @@
             <a href="{{ document.file.url }}" class="btn btn-outline-dark"><i class="fa fa-download"></i> {{ document.get__name }}</a>
         </div>
             {% endfor %}
-            {% else %}
-            <p class="text-danger">No Resource Found!</p>
-            {% endif %}
+
         </ul>
+        {% else %}
+        <p class="text-danger">No Resource Found!</p>
+        {% endif %}
     </div>
 </div>
-<div class="latest_articles my-5">
+
+
+<div class="latest_articles col-12 col-md-4 col-xxl-2 p-5">
     <h1 class="fw-bold text-success">Latest Articles</h1>
     {% for article in latest_articles %}
     <hr>
@@ -72,6 +76,9 @@
     {% endfor %}
 
 </div>
+
+
+
 </div>
 
 

@@ -1,21 +1,77 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from base.forms import LoginForm, SignupForm
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout, authenticate
+from django.contrib.auth import login as dj_login
 
+
+from django.contrib.auth import logout, authenticate
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from base.models import * 
-from django.urls import reverse
 from base.forms import *
+from django.conf import settings
 
 
-def login_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect(reverse('login_view'))  # Redirect to your login page
-        return view_func(request, *args, **kwargs)
-    return wrapper
+
+
+def login_view(request):
+    
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            
+            user = authenticate(email=email, password=password)
+
+            if user is not None:
+                dj_login(request, user)
+
+                redirect_url = request.POST.get('redirect_url') if request.POST.get('redirect_url') else settings.LOGOUT_REDIRECT_URL
+
+                return redirect(redirect_url)
+            else:
+                form.add_error('password', "No! Account Found. Please enter a correct email and password. Note that both fields may be case-sensitive")
+                return render(request, 'base/login.html', {'form': form})
+    else:
+        form = LoginForm()
+    return render(request, 'base/login.html', {'form': form})
+
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            dj_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('homepage_view')
+        
+        else:
+            return render(request, 'base/signup.html', {'form': form})
+    else:
+        form = SignupForm()
+    return render(request, 'base/signup.html', {'form': form})
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('homepage_view')
+
+
+def forget_password_view(request):
+    if request.method == "POST":
+        print(request.POST)
+        form = ForgetPassswordForm(None, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(settings.LOGIN_REDIRECT_URL)
+    else:
+        form  = ForgetPassswordForm()
+    return render(request, 'base/forget_passsword.html', {'form': form})
+
+
 
 def homepage_view(request):
 
@@ -56,52 +112,6 @@ def article_view(request, id):
     }
 
     return render(request, 'base/article.html', context=context)
-
-
-def login_view(request):
-    if request.method == 'POST':
-        userobj = User.objects.filter(email=request.POST['email'])
-        if userobj:
-            userobj = userobj.first()
-        else:
-            messages.error(request, "Invalid email or password")
-            return redirect('login_view')
-        
-        form = LoginForm(request.POST, request.FILES, instance=userobj)
-
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
-
-            if user is not None:
-                auth_login(request, user)
-                return redirect('homepage_view')
-            else:
-                form.add_error(None, 'Invalid email or password')
-    else:
-        form = LoginForm()
-    return render(request, 'base/login.html', {'form': form})
-
-def signup_view(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('homepage_view')
-        
-        else:
-            return render(request, 'base/signup.html', {'form': form})
-    else:
-        form = SignupForm()
-    return render(request, 'base/signup.html', {'form': form})
-
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('homepage_view')
 
 
 

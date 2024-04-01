@@ -18,20 +18,25 @@
 <div class="form-floating mb-3">
     {{ field }}
     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-    {% for error in field.errors %}
-    <div class="invalid-feedback">{{ error }}</div>
-    {% endfor %}
 </div>
+{% for error in field.errors %}
+<div class="text-danger my-2">{{ error }}</div>
+{% endfor %}
 {% endfor %}
 
 
   <div class="lower__btns">
+    
+    <input value="{% if request.GET.next %}{{ request.GET.next }}{% endif %}" type="text" name="redirect_url" class="d-none">
 
   <button type="submit" class="green-bg no_border">Login</button>
   <a class="no_underline dark-blue-bg no_border text-white" href='{% url "signup_view" %}'>
-    Create an account
+    Signup
   </a>
 </div>
+<a href="{% url 'password_reset' %}">
+  <button type="button" class="forget__pass w-100 bg-danger py-3 text-light border-0">Forget Password</button>
+</a>
 
 </form>
 

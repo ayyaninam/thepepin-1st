@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% block content %}
+  
+{% for field in form %}
+
+<form method="post" action="{% url 'forget_password_view' %}" class="login-form-container">
+    {% csrf_token %}
+<div class="mx-auto my-4">
+
+<h1 class="text-secondary fw-bold">Reset Password</h1>
+<hr>
+<div class="form-floating mb-3 mt-5">
+    {{ field }}
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+</div>
+{% for error in field.errors %}
+<div class="text-danger my-2">{{ error }}</div>
+{% endfor %}
+{% endfor %}
+
+<button type="submit" class="btn btn-success my-4">Send mail</button>
+</div>
+
+</form>
+
+{% endblock content %}

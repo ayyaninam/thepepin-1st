@@ -3,6 +3,8 @@ from django.db import models
 import os
 
 class User(AbstractUser):
+    USERNAME_FIELD = 'email'
+
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True, default='profile_pictures/default_pp.png')
     email = models.EmailField(unique=True)
     user_title = models.CharField(max_length=100, blank=True)
@@ -22,8 +24,6 @@ class User(AbstractUser):
     honors_and_awards = models.ManyToManyField('HonorsAndAwards', related_name='users', blank=True)
     affiliations = models.ManyToManyField('Affiliation', related_name='users', blank=True)
     username = None
-    USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []  # Add any additional required fields here
 
     def __str__(self) -> str:

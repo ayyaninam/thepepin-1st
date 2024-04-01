@@ -73,7 +73,7 @@ nav{
     text-decoration: none;
 }
 
-.base__navbar .left .logo_image{
+nav .logo_image{
     width: 10rem;
 }
 
@@ -197,8 +197,10 @@ nav{
 }
 
 .article_card:hover{
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #00ab5060; 
+    /* background: linear-gradient(to top, #00ab5010 1%, #ffffff 100%); */
+
 }
 
 .article__encloser{
@@ -207,9 +209,9 @@ nav{
 }
 
 .articles_with_side_bar{
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
-    align-items: top;
+    align-items: top; */
     width: 90%;
     margin: 0 auto;
 }

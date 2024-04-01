@@ -1,20 +1,27 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.utils.translation import gettext_lazy as _
 
-from django.contrib.auth.forms import UserCreationForm
 from base.models import *
+
 
 User = get_user_model()
 
 
-class LoginForm(forms.ModelForm):
-    password = forms.CharField(label="Password", strip=False, widget=forms.PasswordInput)
+class LoginForm(forms.Form):
 
-    class Meta:
-        model = User
-        fields = ['email', 'password']
-
+    email = forms.EmailField(
+        label=_("Email"),
+        validators=[validate_email],
+    )
+    password = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
+    )
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -86,3 +93,12 @@ class UserForm(forms.ModelForm):
 
         if profile_picture:
             self.fields['profile_picture'].initial = profile_picture
+
+
+
+class ForgetPassswordForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(ForgetPassswordForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['placeholder'] = visible.field.label

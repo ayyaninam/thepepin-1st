@@ -20,7 +20,7 @@
     {{ field }}
     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
     {% for error in field.errors %}
-    <div class="invalid-feedback">{{ error }}</div>
+    <div class="text-danger">{{ error }}</div>
     {% endfor %}
 </div>
 {% endfor %}
@@ -29,9 +29,12 @@
     <div class="lower__btns">
     <button type="submit" class="green-bg no_border">Register</button>
     <a class="no_underline dark-blue-bg no_border text-white" href='{% url "login_view" %}'>
-   I have an account
+   Login
   </a>
   </div>
+  <a href="{% url 'password_reset' %}">
+  <button type="button" class="forget__pass w-100 bg-danger py-3 text-light border-0">Forget Password</button>
+</a>
   </form>
   
 
