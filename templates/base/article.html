@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load customfilters %}
-
+{% load static %}
 {% block content %}
 <div class="articles_with_side_bar row mx-auto">
 
@@ -8,6 +8,22 @@
     <small class="d-block"><span class="text-muted">Type:</span> {{article.article_type}}</small>
     <small class="d-block"><span class="test-muted">Institution:</span> {{article.institution}}</small>
     <h2 class="headline__art_en">{{article.title}}</h2>
+    <a href="{% url 'profile_view' article.user.id %}" class="text-dark no_underline cursor__pointer d-flex justify-content-start align-items-center">
+        {%if article.user.profile_picture%}
+    <img class="pp" src="{{article.user.profile_picture.url}}" alt="">
+    {% else %}
+    <img class="pp" src="{% static 'base/images/default_pp.png' %}" alt="">
+
+    {% endif %}
+
+    {% if user.first_name or user.last_name %}
+    <p class="mx-2 fw-bold my-0">{{user.first_name}} {{user.last_name}}</p>
+    {% else %}
+    <p class="mx-2 fw-bold my-0">{{user.email}}</p>
+    {% endif%}
+
+</a>
+
     <div class="description">
         <hr>
         {% autoescape off %}

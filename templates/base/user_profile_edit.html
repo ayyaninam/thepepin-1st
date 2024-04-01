@@ -52,7 +52,7 @@
 
 
     <div class="form-floating mb-3">
-        <input value="{{request.user.user_title}}" type="text" id="user_title" name="user_title" class="form-control"
+        <input maxlength="250" value="{{request.user.user_title}}" type="text" id="user_title" name="user_title" class="form-control"
             placeholder="Title">
         <label for="user_title">Title</label>
     </div>

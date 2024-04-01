@@ -62,7 +62,6 @@ def logout_view(request):
 
 def forget_password_view(request):
     if request.method == "POST":
-        print(request.POST)
         form = ForgetPassswordForm(None, request.POST)
         if form.is_valid():
             form.save()
@@ -119,7 +118,6 @@ def profile_view(request, id):
     try:
         user = User.objects.get(id=id)
         all_articles = Article.objects.filter(user=user).order_by('-published_date')
-        print(all_articles)
         if not user == request.user:
             user.profile_views = user.profile_views + 1
         user.save()

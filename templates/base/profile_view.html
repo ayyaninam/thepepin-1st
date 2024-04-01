@@ -1,25 +1,28 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block content %}
-  <div class="profile_view w-75 mx-auto">
-    {% csrf_token %}
-    {% if messages %}
-    <ul class="errorlist">
-        {% for message in messages %}
-        <button class="rounded btn btn-danger mx-auto d-flex">{{ message }}</button>
-        {% endfor %}
-    </ul>
-{% endif %}
+<div class="profile_view w-75 mx-auto">
+  {% csrf_token %}
+  {% if messages %}
+  <ul class="errorlist">
+    {% for message in messages %}
+    <button class="rounded btn btn-danger mx-auto d-flex">{{ message }}</button>
+    {% endfor %}
+  </ul>
+  {% endif %}
 
-<div class="first_profile_encloser my-5">
-    <div class="profile__details d-flex">
+  <div class="first_profile_encloser my-5 ">
+    <div class="profile__details row">
+      <div class="col-12 col-sm-2">
+
       {% if user.profile_picture %}
-    <img class="pp" src="{{user.profile_picture.url}}" alt="">
-    {% else %}
-    <img class="pp" src="{% static 'base/images/default_pp.png' %}" alt="">
+      <img class="pp" src="{{user.profile_picture.url}}" alt="">
+      {% else %}
+      <img class="pp" src="{% static 'base/images/default_pp.png' %}" alt="">
+      {%endif%}
+    </div>
 
-    {%endif%}
-    <div class="name_det mx-5">
+      <div class="col-12 col-sm-10  px-4 name_det">
         {% if user.first_name or user.last_name %}
         <h1 class="fw-bold my-0">{{user.first_name}} {{user.last_name}}</h1>
         {% else %}
@@ -27,166 +30,167 @@
         {% endif%}
 
         <small class="my-0">{{user.user_title}}</small>
-        <div class="icon_pack_social d-flex">
+        <div class="icon_pack_social d-flex ">
           <a target="_blank" href="{{user.facebook_link}}"><i class="mx-2 text-secondary fa fa-facebook"></i></a>
           <a target="_blank" href="{{user.linkedin_link}}"><i class="mx-2 text-secondary fa fa-linkedin"></i></a>
           <a target="_blank" href="{{user.twitter_link}}"><i class="mx-2 text-secondary fa fa-twitter"></i></a>
           <a target="_blank" href="{{user.instagram_link}}"><i class="mx-2 text-secondary fa fa-instagram"></i></a>
         </div>
+      </div>
+
     </div>
-</div>
-<div class="profile__stats my-5 d-flex flex-row justify-content-around">
+    <div class="profile__stats my-5 d-flex flex-wrap flex-row justify-content-around">
 
 
-  <div class="card text-bg-primary mb-3" style="min-width: 10rem;">
-    <div class="card-header">Total Articles</div>
-    <div class="card-body">
-      <h5 class="card-title">{{user.total_publications}}</h5>
+      <div class="card text-bg-primary mb-3 mx-2" style="min-width: 10rem; max-width:10rem;">
+        <div class="card-header">Total Articles</div>
+        <div class="card-body">
+          <h5 class="card-title">{{user.total_publications}}</h5>
+        </div>
+      </div>
+
+
+      <div class="card text-bg-dark mb-3 mx-2" style="min-width: 10rem; max-width:10rem;">
+        <div class="card-header">Total Articles Views</div>
+        <div class="card-body">
+          <h5 class="card-title">{{user.publication_views}}</h5>
+        </div>
+      </div>
+
+
+      <div class="card text-bg-dark mb-3 mx-2" style="min-width: 10rem; max-width:10rem;">
+        <div class="card-header">Profile Views</div>
+        <div class="card-body">
+          <h5 class="card-title">{{user.profile_views}}</h5>
+        </div>
+      </div>
+
+
+      <div class="card text-bg-primary mb-3 mx-2" style="min-width: 10rem; max-width:10rem;">
+        <div class="card-header">Followers</div>
+        <div class="card-body">
+          <h5 class="card-title">{{user.followers.all | length}}</h5>
+        </div>
+      </div>
+
     </div>
+
   </div>
 
-
-  <div class="card text-bg-dark mb-3" style="min-width: 10rem;">
-    <div class="card-header">Total Articles Views</div>
-    <div class="card-body">
-      <h5 class="card-title">{{user.publication_views}}</h5>
-    </div>
+  <div class="button__collection dj__shifter__buttons">
+    <button class="bg-dark text-light" id="article__btn">Articles</button>
+    <button class=" " id="detail__btn">Details</button>
   </div>
 
-
-  <div class="card text-bg-dark mb-3" style="min-width: 10rem;">
-    <div class="card-header">Profile Views</div>
-    <div class="card-body">
-      <h5 class="card-title">{{user.profile_views}}</h5>
-    </div>
-  </div>
-
-
-  <div class="card text-bg-primary mb-3" style="min-width: 10rem;">
-    <div class="card-header">Followers</div>
-    <div class="card-body">
-      <h5 class="card-title">{{user.followers.all | length}}</h5>
-    </div>
-  </div>
-
-</div>
-
-</div>
-
-<div class="button__collection">
-  <button class="btn btn-success " id="article__btn">Articles</button>
-  <button class="btn btn-secondary " id="detail__btn">Details</button>
-</div>
-
-<div id="all_articles" class="all_articles my-5">
-  <h1 class="fw-bold text-secondary">Articles</h1>
-  <hr>
-  <div class="all_closer my-3 d-flex flex-wrap justify-content-around">
-    {% for article in all_articles %}
-    <a class="article_card text-dark no_underline" href="{% url 'article_view' article.id %}">
+  <div id="all_articles" class="all_articles my-5">
+    <h1 class="fw-bold text-secondary">Articles</h1>
+    <hr>
+    <div class="all_closer my-3 d-flex flex-wrap justify-content-around">
+      {% for article in all_articles %}
+      <a class="article_card text-dark no_underline" href="{% url 'article_view' article.id %}">
 
         <small class="my-0 text-muted">{{article.article_type}}</small>
         <small class="text-muted published_date_of_article">Published on: {{article.published_date}}</small>
         <span class="h4 art__headline">{{article.title | slice:"0:100" }}</span>
         <small class="article_keywords text-muted">
-            {% for keyword in article.keywords.all|slice:":6" %}
-                {{ keyword.name }} •
-            {% endfor %}
+          {% for keyword in article.keywords.all|slice:":6" %}
+          {{ keyword.name }} •
+          {% endfor %}
         </small>
         <small class="my-0 text-muted">{{article.institution}}</small>
         <hr class="my-2 w-50">
         <small class="my-0">Views: {{article.views}}</small>
-    </a>
-    {% endfor %}
+      </a>
+      {% endfor %}
+    </div>
   </div>
-</div>
 
-<div id="other__details" class="other__details d-none my-5">
-<div class="user__bio">
-    <h1 class="fw-bold text-secondary my-0">User Bio</h1>
-    <hr class="w-75 mt-0 mb-4">
-    <p >{{user.user_bio}}</p>
-</div>
-<div class="user__spec my-5">
-    <h1 class="fw-bold text-secondary my-0">Specialties</h1>
-    <hr class="w-75 mt-0 mb-4">
-    {% if user.specialty.all %}
-    {% for specialty in user.specialty.all %}
+  <div id="other__details" class="other__details d-none my-5">
+    <div class="user__bio">
+      <h1 class="fw-bold text-secondary my-0">User Bio</h1>
+      <hr class="w-75 mt-0 mb-4">
+      <p>{{user.user_bio}}</p>
+    </div>
+    <div class="user__spec my-5">
+      <h1 class="fw-bold text-secondary my-0">Specialties</h1>
+      <hr class="w-75 mt-0 mb-4">
+      {% if user.specialty.all %}
+      {% for specialty in user.specialty.all %}
       <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
       <p>{{specialty.description}}</p>
       <hr class="w-25">
-    {% endfor %}
-    {% else %}
-    <p class="text-danger">No record Found!</p>
-    {% endif %}
-</div>
+      {% endfor %}
+      {% else %}
+      <p class="text-danger">No record Found!</p>
+      {% endif %}
+    </div>
 
 
-<div class="user__exp my-5">
-    <h1 class="fw-bold text-secondary my-0">Expertise</h1>
-    <hr class="w-75 mt-0 mb-4">
-    {% if user.expertise.all %}
-    {% for specialty in user.expertise.all %}
+    <div class="user__exp my-5">
+      <h1 class="fw-bold text-secondary my-0">Expertise</h1>
+      <hr class="w-75 mt-0 mb-4">
+      {% if user.expertise.all %}
+      {% for specialty in user.expertise.all %}
       <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
       <p>{{specialty.description}}</p>
       <hr class="w-25">
-    {% endfor %}
-    {% else %}
-    <p class="text-danger">No record Found!</p>
-    {% endif %}
-</div>
+      {% endfor %}
+      {% else %}
+      <p class="text-danger">No record Found!</p>
+      {% endif %}
+    </div>
 
-<div class="user__edu my-5">
-    <h1 class="fw-bold text-secondary my-0">Education</h1>
-    <hr class="w-75 mt-0 mb-4">
-    {% if user.education.all %}
-    {% for specialty in user.education.all %}
+    <div class="user__edu my-5">
+      <h1 class="fw-bold text-secondary my-0">Education</h1>
+      <hr class="w-75 mt-0 mb-4">
+      {% if user.education.all %}
+      {% for specialty in user.education.all %}
       <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
       <p>{{specialty.description}}</p>
       <hr class="w-25">
-    {% endfor %}
-    {% else %}
-    <p class="text-danger">No record Found!</p>
-    {% endif %}
-</div>
+      {% endfor %}
+      {% else %}
+      <p class="text-danger">No record Found!</p>
+      {% endif %}
+    </div>
 
-<div class="user__aff my-5">
-    <h1 class="fw-bold text-secondary my-0">Affiliations</h1>
-    <hr class="w-75 mt-0 mb-4">
-    {% if user.affiliations.all %}
-    {% for specialty in user.affiliations.all %}
+    <div class="user__aff my-5">
+      <h1 class="fw-bold text-secondary my-0">Affiliations</h1>
+      <hr class="w-75 mt-0 mb-4">
+      {% if user.affiliations.all %}
+      {% for specialty in user.affiliations.all %}
       <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
       <p>{{specialty.description}}</p>
       <hr class="w-25">
-    {% endfor %}
-    {% else %}
-    <p class="text-danger">No record Found!</p>
-    {% endif %}
-</div>
+      {% endfor %}
+      {% else %}
+      <p class="text-danger">No record Found!</p>
+      {% endif %}
+    </div>
 
 
-<div class="user__haa my-5">
-    <h1 class="fw-bold text-secondary my-0">Honors and Awards</h1>
-    <hr class="w-75 mt-0 mb-4">
-    {% if user.honors_and_awards.all %}
-    {% for specialty in user.honors_and_awards.all %}
+    <div class="user__haa my-5">
+      <h1 class="fw-bold text-secondary my-0">Honors and Awards</h1>
+      <hr class="w-75 mt-0 mb-4">
+      {% if user.honors_and_awards.all %}
+      {% for specialty in user.honors_and_awards.all %}
       <h4 class="text-secondary fw-bold">{{specialty.title}}</h4>
       <p>{{specialty.description}}</p>
       <hr class="w-25">
-    {% endfor %}
-    {% else %}
-    <p class="text-danger">No record Found!</p>
-    {% endif %}
-</div>
+      {% endfor %}
+      {% else %}
+      <p class="text-danger">No record Found!</p>
+      {% endif %}
+    </div>
 
-
-</div>
 
   </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+
     let article__btn = document.getElementById('article__btn');
     let detail__btn = document.getElementById('detail__btn');
     let all_articles = document.getElementById('all_articles');
@@ -197,24 +201,28 @@
       all_articles.classList.remove('d-none')
       other__details.classList.add('d-none')
 
-      article__btn.classList.add('btn-success')
-      article__btn.classList.remove('btn-secondary')
-      detail__btn.classList.remove('btn-success')
-      detail__btn.classList.add('btn-secondary')
+      article__btn.classList.add('bg-dark')
+      detail__btn.classList.remove('bg-dark')
+      article__btn.classList.add('text-light')
+      detail__btn.classList.remove('text-light')
+      // detail__btn.classList.remove('btn-success')
+      // detail__btn.classList.add('btn-secondary')
     });
     detail__btn.addEventListener('click', function () {
       console.log("first")
       all_articles.classList.add('d-none')
       other__details.classList.remove('d-none')
 
-      detail__btn.classList.add('btn-success')
-      detail__btn.classList.remove('btn-secondary')
-      article__btn.classList.remove('btn-success')
-      article__btn.classList.add('btn-secondary')
+      detail__btn.classList.add('bg-dark')
+      article__btn.classList.remove('bg-dark')
+      detail__btn.classList.add('text-light')
+      article__btn.classList.remove('text-light')
+      // article__btn.classList.remove('btn-success')
+      // article__btn.classList.add('btn-secondary')
     });
 
   });
 
-    
-  </script>
+
+</script>
 {% endblock content %}

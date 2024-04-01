@@ -13,7 +13,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'create_article_view' %}">Submit your Article</a></li>
-            {% if user.is_authenticated %}
+            {% if request.user.is_authenticated %}
             <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'user_profile_edit_view' %}">Edit Profile</a></li>
             <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'profile_view' request.user.id %}">Profile</a></li>
             {% endif %}
