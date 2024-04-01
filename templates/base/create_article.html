@@ -21,11 +21,13 @@
 </ul>
 {% endif %}
 
-<form action="{% url 'create_article_view' %}" class="needs-validation main__create_article__form"
+<form action="{% url 'create_article_view' %}" class="my-5 mx-auto row needs-validation main__create_article__form"
     id="article__creation__form" enctype="multipart/form-data" method="POST" onkeydown="return event.key != 'Enter';">
     {% csrf_token %}
     <!-- title  -->
-    <div class="w-100">
+
+
+    <div class="col-12 text-center col-md-8">
 
         <h1 class="fw-bold my-5 d-flex justify-content-center">Article Title, Type and Institution</h1>
 
@@ -98,10 +100,10 @@
             <input required name="all_keywords" id="all_keywords" placeholder="Add Keywords" hidden type="text">
         </div>
 
-        <button class="btn btn-outline-success my-5 rounded-pill" type="submit">Submit</button>
     </div>
-    </div>
-    <div>
+   
+
+    <div class=" col-12 text-center col-md-4">
         <h1 class="fw-bold">Upload the Resources Here...</h1>
         <hr>
 
@@ -137,6 +139,9 @@
 
 
     </div>
+
+    
+    <button class="btn btn-outline-success my-5 rounded-pill w-50 text-wrap" type="submit">Submit</button>
 
 </form>
 <script>
