@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 {% block content %}
   <div class="profile_view w-75 mx-auto">
     {% csrf_token %}
@@ -12,7 +13,12 @@
 
 <div class="first_profile_encloser my-5">
     <div class="profile__details d-flex">
+      {% if user.profile_picture %}
     <img class="pp" src="{{user.profile_picture.url}}" alt="">
+    {% else %}
+    <img class="pp" src="{% static 'base/images/default_pp.png' %}" alt="">
+
+    {%endif%}
     <div class="name_det mx-5">
         {% if user.first_name or user.last_name %}
         <h1 class="fw-bold my-0">{{user.first_name}} {{user.last_name}}</h1>
@@ -67,7 +73,35 @@
 
 </div>
 
-<div class="other__details my-5">
+<div class="button__collection">
+  <button class="btn btn-success " id="article__btn">Articles</button>
+  <button class="btn btn-secondary " id="detail__btn">Details</button>
+</div>
+
+<div id="all_articles" class="all_articles my-5">
+  <h1 class="fw-bold text-secondary">Articles</h1>
+  <hr>
+  <div class="all_closer my-3 d-flex flex-wrap justify-content-around">
+    {% for article in all_articles %}
+    <a class="article_card text-dark no_underline" href="{% url 'article_view' article.id %}">
+
+        <small class="my-0 text-muted">{{article.article_type}}</small>
+        <small class="text-muted published_date_of_article">Published on: {{article.published_date}}</small>
+        <span class="h4 art__headline">{{article.title | slice:"0:100" }}</span>
+        <small class="article_keywords text-muted">
+            {% for keyword in article.keywords.all|slice:":6" %}
+                {{ keyword.name }} •
+            {% endfor %}
+        </small>
+        <small class="my-0 text-muted">{{article.institution}}</small>
+        <hr class="my-2 w-50">
+        <small class="my-0">Views: {{article.views}}</small>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="other__details" class="other__details d-none my-5">
 <div class="user__bio">
     <h1 class="fw-bold text-secondary my-0">User Bio</h1>
     <hr class="w-75 mt-0 mb-4">
@@ -149,4 +183,38 @@
 </div>
 
   </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      
+    let article__btn = document.getElementById('article__btn');
+    let detail__btn = document.getElementById('detail__btn');
+    let all_articles = document.getElementById('all_articles');
+    let other__details = document.getElementById('other__details');
+
+    article__btn.addEventListener('click', function () {
+      console.log("first")
+      all_articles.classList.remove('d-none')
+      other__details.classList.add('d-none')
+
+      article__btn.classList.add('btn-success')
+      article__btn.classList.remove('btn-secondary')
+      detail__btn.classList.remove('btn-success')
+      detail__btn.classList.add('btn-secondary')
+    });
+    detail__btn.addEventListener('click', function () {
+      console.log("first")
+      all_articles.classList.add('d-none')
+      other__details.classList.remove('d-none')
+
+      detail__btn.classList.add('btn-success')
+      detail__btn.classList.remove('btn-secondary')
+      article__btn.classList.remove('btn-success')
+      article__btn.classList.add('btn-secondary')
+    });
+
+  });
+
+    
+  </script>
 {% endblock content %}

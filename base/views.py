@@ -118,6 +118,8 @@ def article_view(request, id):
 def profile_view(request, id):
     try:
         user = User.objects.get(id=id)
+        all_articles = Article.objects.filter(user=user).order_by('-published_date')
+        print(all_articles)
         if not user == request.user:
             user.profile_views = user.profile_views + 1
         user.save()
@@ -127,9 +129,10 @@ def profile_view(request, id):
         return render(request, 'base/profile_view.html')
     
     context = {
-        'user':user
+        'user':user,
+        "all_articles":all_articles,
     }
-    return render(request, 'base/profile_view.html')
+    return render(request, 'base/profile_view.html', context)
 
 @login_required
 def create_article_view(request):
