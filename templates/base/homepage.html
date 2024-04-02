@@ -15,7 +15,7 @@
 
 <div class="all_articles_container my-5">
     {% if not all_articles %}
-    <button class="btn btn-danger btn-sm rounded-pill"></button>
+    <button class="btn btn-danger btn-sm rounded-pill">No Articles Found!</button>
     {% endif %}
     {% for article in all_articles %}
     <a class="article_card text-dark no_underline" href="{% url 'article_view' article.id %}">
