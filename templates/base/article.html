@@ -16,10 +16,10 @@
 
     {% endif %}
 
-    {% if user.first_name or user.last_name %}
-    <p class="mx-2 fw-bold my-0">{{user.first_name}} {{user.last_name}}</p>
+    {% if article.user.first_name or article.user.last_name %}
+    <p class="mx-2 fw-bold my-0">{{article.user.first_name}} {{article.user.last_name}}</p>
     {% else %}
-    <p class="mx-2 fw-bold my-0">{{user.email}}</p>
+    <p class="mx-2 fw-bold my-0">{{article.user.email}}</p>
     {% endif%}
 
 </a>
