@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from base.manager import UserManager
 from django.db import models
 import os
 
@@ -23,6 +24,11 @@ class User(AbstractUser):
     education = models.ManyToManyField('Education', related_name='users', blank=True)
     honors_and_awards = models.ManyToManyField('HonorsAndAwards', related_name='users', blank=True)
     affiliations = models.ManyToManyField('Affiliation', related_name='users', blank=True)
+
+
+    objects = UserManager()
+
+
     username = None
     REQUIRED_FIELDS = []  # Add any additional required fields here
 
