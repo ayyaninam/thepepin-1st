@@ -8,7 +8,7 @@ class User(AbstractUser):
 
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True, default='profile_pictures/default_pp.png')
     email = models.EmailField(unique=True)
-    user_title = models.CharField(max_length=100, blank=True)
+    title = models.ForeignKey('title', null=True, blank=True, on_delete=models.CASCADE)
     user_bio = models.TextField(blank=True)
     followers = models.ManyToManyField('self', symmetrical=False, related_name='following')
     facebook_link = models.URLField(blank=True)
@@ -26,6 +26,10 @@ class User(AbstractUser):
     affiliations = models.ManyToManyField('Affiliation', related_name='users', blank=True)
 
 
+    orcid_number = models.TextField(null=True, blank=True)
+    research_network_url = models.URLField(null=True, blank=True)
+
+
     objects = UserManager()
 
 
@@ -35,6 +39,12 @@ class User(AbstractUser):
     def __str__(self) -> str:
         return self.email
     
+
+class Title(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+
+    def __str__(self) -> str:
+        return self.name
 
 class Specialty(models.Model):
     # user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='SpecialtyUser', blank=False)

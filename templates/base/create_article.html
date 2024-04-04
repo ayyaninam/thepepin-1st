@@ -68,10 +68,10 @@
 
         </div>
 
-        <h1 class="fw-bold my-5 d-flex justify-content-center">Article Description</h1>
+        <h1 class="fw-bold my-5 d-flex justify-content-center">Abstract</h1>
 
         <div class="single__target">
-            <textarea name="description" placeholder="Add Description" class="w-100 form-control" id="description"
+            <textarea name="description" placeholder="Add Abstract" class="w-100 form-control" id="description"
                 rows="20"></textarea>
         </div>
 
@@ -96,7 +96,7 @@
             onclick="Array.from(this.children).find(n=>n.tagName==='INPUT').focus()">
             <div class="all_add_keywords cursor__pointer" id="all_add_keywords">
             </div>
-            <input maxlength="30" id="keywords" placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
+            <input maxlength="60" id="keywords" placeholder="Add Keywords" type="text" onkeyup="multiSearchKeyup(this)">
             <input required name="all_keywords" id="all_keywords" placeholder="Add Keywords" hidden type="text">
         </div>
 

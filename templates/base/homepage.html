@@ -4,13 +4,17 @@
 
 
 <span class="fw-bold fs-2 ariel">{{all_articles|length}} Article(s)</span>
-<div class="all_filters mt-3">
-    <div class="left_filters">
+<div class="all_filters mt-3 d-flex justify-content-center align-items-center">
+    <div class="left_filters mx-4">
 
         <a class="btn active rounded-pill" href="{% url 'homepage_view' %}?sort=recent">Most Recent</a>
 
         <a class="btn active rounded-pill" href="{% url 'homepage_view' %}?sort=viewed">Most viewed</a>
     </div>
+    <form class="mx-4 d-flex justify-content-center align-items-center " method="GET" action="{% url 'homepage_view' %}" >
+    <input name="sort" type="text" class="rounded-start-pill border-end-0 border-dark">
+    <button type="submit" class="btn btn-sm rounded-end-pill btn-dark">Search</button>
+</form>
 </div>
 
 <div class="all_articles_container my-5">

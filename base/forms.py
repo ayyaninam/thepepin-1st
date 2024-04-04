@@ -31,10 +31,11 @@ class LoginForm(forms.Form):
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
+    orcid_number = forms.CharField(max_length=2000)
 
     class Meta:
         model = User
-        fields = ['email', 'password1', 'password2']
+        fields = ['profile_picture', 'title', 'orcid_number', 'email', 'password1', 'password2', 'research_network_url']
 
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)

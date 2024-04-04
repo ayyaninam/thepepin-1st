@@ -51,10 +51,23 @@
             </div>
 
 
+
+
     <div class="form-floating mb-3">
-        <input maxlength="250" value="{{request.user.user_title}}" type="text" id="user_title" name="user_title" class="form-control"
+        <!-- <input maxlength="250" value="{{request.user.user_title}}" type="text" id="user_title" name="user_title" class="form-control"
             placeholder="Title">
-        <label for="user_title">Title</label>
+        <label for="user_title">Title</label> -->
+        <select name="user_title" class="form-select" aria-label="Default select example">
+            {% for title in all_titles %}  
+            {% if title == request.user.title %}
+            <option selected>{{title}}</option>
+            {% else %}
+            <option>{{title}}</option>
+            {% endif %}                
+
+            {% endfor %}
+        </select>
+        <label for="title">Title</label>
     </div>
 
 
@@ -90,6 +103,18 @@
                 <input value="{{request.user.instagram_link}}" type="text" onChange="validateUrl(this)"
                     id="instagram_link" name="instagram_link" class="form-control" placeholder="instagram Link">
                 <label for="instagram_link">Instagram url</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input value="{{request.user.orcid_number}}" type="text"
+                    id="orcid_number" name="orcid_number" class="form-control" placeholder="ORCID Number">
+                <label for="orcid_number">ORCID Number</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input value="{{request.user.research_network_url}}" type="text"
+                    id="research_network_url" name="research_network_url" class="form-control" placeholder="Research Network URL">
+                <label for="research_network_url">Research Network URL</label>
             </div>
 
 

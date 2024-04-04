@@ -83,6 +83,9 @@ def homepage_view(request):
     
     elif sort=='viewed':
         all_articles = Article.objects.all().order_by('-views')
+
+    else:
+        all_articles = Article.objects.filter(title__contains=sort)
         
     context = {
         'all_articles':all_articles,
@@ -250,6 +253,8 @@ def create_article_view(request):
 
 @login_required
 def user_profile_edit_view(request):
+    context = {}
+
     if request.method == 'POST':
         user = request.user
         # print(request.POST)
@@ -261,15 +266,20 @@ def user_profile_edit_view(request):
         twitter_link = request.POST.get('twitter_link',None)
         linkedin_link = request.POST.get('linkedin_link',None)
         instagram_link = request.POST.get('instagram_link',None)
+        orcid_number = request.POST.get('orcid_number',None)
+        research_network_url = request.POST.get('research_network_url',None)
 
+        title_obj = Title.objects.filter(name=user_title)
         user.first_name = first_name
         user.last_name = last_name
-        user.user_title = user_title
+        user.title = title_obj.first() if title_obj else user.user_title
         user.user_bio = user_bio
         user.facebook_link = facebook_link
         user.twitter_link = twitter_link
         user.linkedin_link = linkedin_link
         user.instagram_link = instagram_link
+        user.orcid_number = orcid_number
+        user.research_network_url = research_network_url
 
 
 
@@ -335,6 +345,10 @@ def user_profile_edit_view(request):
         user.save()
 
         return HttpResponseRedirect(request.path_info)
+    else:
+        all_titles= Title.objects.all()
+        context.update({
+            "all_titles":all_titles,
+        })
 
-
-    return render(request, 'base/user_profile_edit.html')
+    return render(request, 'base/user_profile_edit.html', context)
