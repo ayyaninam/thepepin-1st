@@ -12,6 +12,11 @@ urlpatterns = [
     # path('forget-password', views.forget_password_view, name='forget_password_view'),
     path('create-article', views.create_article_view, name='create_article_view'),
     path('user-profile-edit-view', views.user_profile_edit_view, name='user_profile_edit_view'),
+    path('searcher', views.searcher, name='searcher'),
+    path('create-event', views.create_event, name='create_event'),
+    path('create-searcher', views.create_searcher, name='create_searcher'),
+    path('events', views.events, name='events'),
+    path('event-post/<int:post_id>', views.event_post, name='event_post'),
     path('profile-view/<int:id>', views.profile_view, name='profile_view'),
 
 

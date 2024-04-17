@@ -6,7 +6,7 @@ from django.contrib.auth import login as dj_login
 
 from django.contrib.auth import logout, authenticate
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from base.models import * 
 from base.forms import *
 from django.conf import settings
@@ -80,16 +80,25 @@ def homepage_view(request):
 
     if sort=='recent':
         all_articles = Article.objects.all().order_by('-published_date')
+        all_videos = Searcher.objects.all().order_by('-uploaded_on')
+        all_events = Event.objects.all().order_by('-date')
     
     elif sort=='viewed':
         all_articles = Article.objects.all().order_by('-views')
+        all_videos = Searcher.objects.all().order_by('-uploaded_on')
+        all_events = Event.objects.all().order_by('-date')
 
     else:
         all_articles = Article.objects.filter(title__contains=sort)
+        all_videos = Searcher.objects.filter(title__contains=sort)
+        all_events = Event.objects.filter(title__contains=sort)
         
     context = {
         'all_articles':all_articles,
+        'all_videos':all_videos,
+        'all_events':all_events,
     }
+    
     return render(request, 'base/homepage.html', context)
 
 
@@ -121,6 +130,8 @@ def profile_view(request, id):
     try:
         user = User.objects.get(id=id)
         all_articles = Article.objects.filter(user=user).order_by('-published_date')
+        all_post = Event.objects.filter(user=user).order_by('-date')
+        all_videos = Searcher.objects.filter(user=user).order_by('-uploaded_on')
         if not user == request.user:
             user.profile_views = user.profile_views + 1
         user.save()
@@ -132,6 +143,8 @@ def profile_view(request, id):
     context = {
         'user':user,
         "all_articles":all_articles,
+        "all_post":all_post,
+        "all_videos":all_videos,
     }
     return render(request, 'base/profile_view.html', context)
 
@@ -352,3 +365,60 @@ def user_profile_edit_view(request):
         })
 
     return render(request, 'base/user_profile_edit.html', context)
+
+
+def searcher(request):
+    all_post = Searcher.objects.all()
+    context = {
+        "all_post":all_post,
+    }
+    return render(request, 'base/searcher.html', context)
+
+
+@login_required
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES)
+        form.instance.user = request.user
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('events')
+    else:
+        form = EventForm()
+        
+    context = {"form":form}
+    return render(request, 'base/create_event.html', context)
+
+@login_required
+def create_searcher(request):
+    if request.method == 'POST':
+        form = SearcherForm(request.POST, request.FILES)
+        form.instance.user = request.user
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('events')
+    else:
+        form = SearcherForm()
+        
+    context = {"form":form}
+    return render(request, 'base/create_searcher.html', context)
+
+def events(request):
+    all_post = Event.objects.all()
+    context = {
+        "all_post":all_post,
+    }
+    return render(request, 'base/events.html', context)
+
+
+def event_post(request, post_id):
+    try:
+        post = Event.objects.get(id=post_id)
+    except:
+        return HttpResponseRedirect('homepage_view')
+
+    context = {
+        'post':post,
+    }
+
+    return render(request, 'base/event_post.html', context)

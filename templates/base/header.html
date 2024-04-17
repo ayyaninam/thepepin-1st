@@ -13,6 +13,8 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'create_article_view' %}">Submit your Article</a></li>
+            <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'create_event' %}">Submit an Event</a></li>
+            <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'create_searcher' %}">Submit an Searcher</a></li>
             {% if request.user.is_authenticated %}
             <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'user_profile_edit_view' %}">Edit Profile</a></li>
             <li class="mx-2"><a class="btn active rounded-pill" href="{% url 'profile_view' request.user.id %}">Profile</a></li>
@@ -22,11 +24,11 @@
             {% if user.is_authenticated %}
             <!-- User is logged in -->
             <a href="{% url 'logout_view' %}" class="mx-2 bttn  no_underline text-dark">
-                <i class="fa fa-sign-out"></i> Logout
+                <i class="fa fa-sign-out-alt"></i> Logout
             </a>
         {% else %}
             <!-- User is not logged in -->
-            <a href="{% url 'login_view' %}" class="mx-2 bttn  no_underline text-dark"><i class="fa fa-sign-in"></i> Login</a>
+            <a href="{% url 'login_view' %}" class="mx-2 bttn  no_underline text-dark"><i class="fa fa-sign-in-alt"></i> Login</a>
             <a href="{% url 'signup_view' %}" class="mx-2 bttn  no_underline text-dark">Signup</a>
         {% endif %}
         </div>

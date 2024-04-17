@@ -112,7 +112,7 @@
 
             <div class="single__file__uploaded">
                 <button class="btn btn-danger btn-sm my-0 float-end" onclick="deleteNode(this)">
-                    <i class="fa fa-trash-o"></i>
+                    <i class="fa fa-trash"></i>
                 </button>
 
                 <div>
@@ -210,7 +210,7 @@
         });
 
         deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'my-0', 'float-end');
-        deleteButton.innerHTML = '<i class="fa fa-trash-o"></i>';
+        deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
 
         // Create unique IDs based on the number of existing file inputs
         var index = fileUploadDiv.getElementsByClassName('single__file__uploaded').length;

@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from base.manager import UserManager
 from django.db import models
 import os
+from django.utils.translation import gettext_lazy as _
+
 
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
@@ -149,3 +151,27 @@ class Institution(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+class Event(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    owner_or_institution_name = models.CharField(_("owner_or_institution_name"), max_length=250, null=False, blank=False, default='admin')
+    title = models.CharField(_("title"), max_length=250, null=False, blank=False)
+    short_description = models.TextField(_("short_description"), null=False, blank=False)
+    cover_image = models.ImageField(_("cover_image"), upload_to="base/culture_cover/", null=True, blank=True)
+    description = models.TextField(_("description"), null=False, blank=False)
+    date = models.DateField(_("date"), null=False, blank=False)
+    location = models.CharField(_("location"), max_length=255, null=True, blank=True)
+    link_to_orignal = models.URLField(_("link_to_orignal"), max_length=1000)
+
+
+class Searcher(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    title = models.CharField(max_length=255, null=False, blank=False)
+    name_of_researcher = models.CharField(max_length=255, null=False, blank=False)
+    uploaded_on = models.DateTimeField(auto_now_add=True)
+    video_url = models.URLField(null=False, blank=False, default="https://www.youtube.com/", help_text="Please Upload your Video on Youtube and Paste Link here...")
+    thumbnail = models.ImageField(upload_to="searcher_thumb", null=False, blank=False)
+
+
+    def __str__(self) -> str:
+        return self.title

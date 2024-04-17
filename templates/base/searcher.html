@@ -1,0 +1,61 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load customfilters %}
+{% block content %}
+
+<div class="container my-5">
+    <h1 class="text-center fw-bold">Searcher at the One</h1>
+    <div class="d-flex justify-content-center align-items-stretch flex-wrap main__edu__section">
+        {% if all_post %}
+
+        {% for post in all_post %}
+        <div class="cursor-pointer mx-2 no_underline card__edu_clu__main__single align-items-center text-center my-3 py-3" onclick="modal__opener(event)">
+
+            {% if post.thumbnail %}
+            <img class="w-75 rounded my-4" src="{{ post.thumbnail.url }}"
+                style="aspect-ratio: 16/9; object-fit: cover;" alt="">
+            {% endif %}
+
+            <h5 class="text-dark">{{ post.title|slice:"0:25" }}...</h5>
+            <small class="text-dark d-block">{{post.name_of_researcher}}</small>
+
+            <button data-id="{{post.id}}" class="bttn my-2 video-btn" data-bs-toggle="modal" data-src="{{post.video_url}}" data-bs-target="#videoModal{{post.id}}">View</button>
+        </div>
+
+
+
+          <div class="modal modal-xl fade" id="videoModal{{post.id}}" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true" tabindex="-100">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">{{post.title}}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <iframe style="aspect-ratio: 16/9;" class="embed-responsive-item w-100 h-100" src={{post.video_url|to_embed}} frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% endfor %}
+        {% else %}
+        <h5
+            class="d-flex justify-content-center align-items-center main__menu__middle__btns pink__to__top__gradient text-dark">NO POST FOUND!</h5>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    function modal__opener(e) {
+        if (e.target.parentNode.classList.contains('card__edu_clu__main__single')){
+            e.target.parentNode.querySelector('button').click()
+        }
+    }
+</script>
+
+{% endblock %}

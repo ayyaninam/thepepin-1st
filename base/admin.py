@@ -14,6 +14,8 @@ admin.site.register(Title)
 admin.site.register(ArticleType)
 admin.site.register(Institution)
 admin.site.register(Resources)
+admin.site.register(Searcher)
+admin.site.register(Event)
 
 
 def duplicate_selected(modeladmin, request, queryset):

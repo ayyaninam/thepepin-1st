@@ -30,8 +30,6 @@
     </div>
 
 
-
-
             <div class="form-floating mb-3">
                 <input value="{{request.user.first_name}}" type="text" id="first_name" name="first_name"
                     class="form-control" placeholder="First Name">
@@ -457,7 +455,7 @@ function generateRandom16DigitNumber() {
         single_div.className = 'single';
         let delBtn = document.createElement('button');
         delBtn.className = 'my-2 btn btn-danger btn-sm d-flex mx-auto';
-        delBtn.innerHTML = '<i class="fa fa-trash-o"></i>'
+        delBtn.innerHTML = '<i class="fa fa-trash"></i>'
         delBtn.addEventListener('click', function (e) {
             packerDeleter(e, this)
         });

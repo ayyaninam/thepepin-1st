@@ -4,12 +4,12 @@ from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from base.models import *
 
 
 User = get_user_model()
-
 
 class LoginForm(forms.Form):
 
@@ -95,7 +95,54 @@ class UserForm(forms.ModelForm):
         if profile_picture:
             self.fields['profile_picture'].initial = profile_picture
 
+class EventForm(forms.ModelForm):
 
+
+
+    class Meta:
+        model = Event
+        fields = ['cover_image', 'owner_or_institution_name', 'title', 'short_description',  'description', 'date', 'location', 'link_to_orignal']
+
+        widgets = {
+            'description': forms.Textarea(attrs={
+                "rows":5,
+                'style': 'height: 250px;'
+                
+                }),
+            'short_description': forms.Textarea(attrs={
+                "rows":5,
+                'style': 'height: 150px;'
+                
+                }),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        self.fields['cover_image'].required = True
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['placeholder'] = visible.field.label
+
+    
+
+
+class SearcherForm(forms.ModelForm):
+
+    class Meta:
+        model = Searcher
+        fields = ['title', 'name_of_researcher', 'thumbnail', 'video_url']
+        labels = {
+            'title': 'Title',
+            'name_of_researcher': 'Name of Researcher',
+            'video_url': 'Video URL',
+            'thumbnail': 'Thumbnail',
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super(SearcherForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['placeholder'] = visible.field.label
 
 class ForgetPassswordForm(PasswordResetForm):
     def __init__(self, *args, **kwargs):

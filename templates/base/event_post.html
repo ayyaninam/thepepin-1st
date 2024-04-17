@@ -1,0 +1,42 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Pepin - {{post.title | slice:"0:10" }} {% endblock title %}
+{% block content %}
+
+
+<div class="post__main__div w-75 m-auto text-center my-5">
+    <button onclick="history.back()" class="bttn">
+        <i class="fa fa-arrow-left"></i>
+        <span>Back</span>
+    </button>
+    <h3 class="my-2 font-bold">{{ post.title }}</h3>
+    <p class="my-4">{{ post.short_description }}</p>
+    {% if post.cover_image %}
+    <img class="w-100 rounded shadow-lg" style="aspect-ratio: 16/9; object-fit: cover;"  src="{{ post.cover_image.url }}" class="img-fluid" alt="{{post.title}}">
+    {% endif %}
+    <div class=" small_icons_task_main my-5 d-flex justify-content-around align-items-center ">
+        <button class="task bttn p-2 rounded d-flex justify-content-center align-items-center">
+            <i class="fas fa-map-marker-alt"></i>
+
+
+            <span class="mx-2">{{ post.location }}</span>
+        </button>
+        <button class="task bttn p-2 rounded d-flex justify-content-center align-items-center">
+            <i class="fas fa-calendar"></i>
+            <span class="mx-2 ">{{ post.date }}</span>
+        </button>
+        <button class="task bttn p-2 rounded d-flex justify-content-center align-items-center">
+            <i class="fas fa-link"></i>
+
+            <a class="mx-2 url_no_link no_underline" target="_blank" href="{{ post.link_to_orignal }}">
+                <span class="text-dark ">Click here</span>
+            </a>
+        </button>
+    </div>
+    <div class="description_post">
+        <p>{{ post.description }}</p>
+    </div>
+</div>
+
+{% endblock %}

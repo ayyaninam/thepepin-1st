@@ -1,23 +1,69 @@
 {% extends "base/base.html" %}
+{% load customfilters %}
 {% block content %}
-<div class="main_all_articles w-75 mx-auto my-5">
+<div class="main_all_articles container mx-auto my-5">
 
 
 <span class="fw-bold fs-2 ariel">{{all_articles|length}} Article(s)</span>
-<div class="all_filters mt-3 d-flex justify-content-center align-items-center">
+<div class="all_filters mt-3 d-flex justify-content-center flex-wrap align-items-center">
     <div class="left_filters mx-4">
 
-        <a class="btn active rounded-pill" href="{% url 'homepage_view' %}?sort=recent">Most Recent</a>
+        <a class="btn active rounded-pill my-2 " href="{% url 'homepage_view' %}?sort=recent">Most Recent</a>
 
-        <a class="btn active rounded-pill" href="{% url 'homepage_view' %}?sort=viewed">Most viewed</a>
+        <a class="btn active rounded-pill my-2 " href="{% url 'homepage_view' %}?sort=viewed">Most viewed</a>
     </div>
-    <form class="mx-4 d-flex justify-content-center align-items-center " method="GET" action="{% url 'homepage_view' %}" >
+    <form class="mx-4 my-2  d-flex justify-content-center align-items-center " method="GET" action="{% url 'homepage_view' %}" >
     <input name="sort" type="text" class="rounded-start-pill border-end-0 border-dark">
     <button type="submit" class="btn btn-sm rounded-end-pill btn-dark">Search</button>
 </form>
+<div class="other__links mx-4">
+    <a class=" my-2 btn active rounded-pill" href="{% url 'searcher' %}?sort=viewed">Searcher at the one</a>
+    <a class=" my-2 btn active rounded-pill" href="{% url 'events' %}?sort=viewed">Research Events</a>
+</div>
 </div>
 
-<div class="all_articles_container my-5">
+
+<div class="d-flex main_hp__block">
+{% if all_videos %}
+  
+<div class="all_videos ">
+    <h2>Latest Video</h2>
+    <div class="min_all_videos">
+        {% for post in all_videos %}
+
+        {% if post.thumbnail %}
+            <img class="w-100 rounded my-2 img-thumbnail img_hover_bg" src={{post.thumbnail.url}} data-id="{{post.id}}" data-bs-toggle="modal" data-src="{{post.video_url}}" data-bs-target="#videoModal{{post.id}}" alt="">
+
+
+            <div class="modal modal-xl fade" id="videoModal{{post.id}}" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true" tabindex="-100">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">{{post.title}}</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <iframe style="aspect-ratio: 16/9;" class="embed-responsive-item w-100 h-100" src={{post.video_url|to_embed}} frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+
+        {% endif %}
+
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endif %}
+    
+
+<div class="all_articles_container my-5 ">
     {% if not all_articles %}
     <button class="btn btn-danger btn-sm rounded-pill">No Articles Found!</button>
     {% endif %}
@@ -38,5 +84,30 @@
     </a>
     {% endfor %}
 </div>
+
+
+{% if all_events %}
+  
+<div class="all_events ">
+    <h2>Latest Events</h2>
+    
+    <div class="min_all_events">
+        {% for post in all_events %}
+
+        {% if post.cover_image %}
+        <a href="{% url 'event_post' post.id %}">
+            <img class="w-100 rounded my-2 img-thumbnail img_hover_bg" src={{post.cover_image.url}} alt="">
+        </a>
+        {% endif %}
+
+        {% endfor %}
+
+    </div>
+</div>
+{% endif %}
+
+
+</div>
+
 </div>
 {% endblock content %}
