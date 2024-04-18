@@ -5,11 +5,34 @@ from django.core.validators import validate_email
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-
+import re
 from base.models import *
 
 
 User = get_user_model()
+
+
+class CustomPasswordValidator:
+    def validate(self, password):
+        # Check for minimum length
+        if len(password) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+
+        # Check for at least one uppercase letter
+        if not any(char.isupper() for char in password):
+            raise ValidationError("Password must contain at least one uppercase letter.")
+
+        # Check for at least one lowercase letter
+        if not any(char.islower() for char in password):
+            raise ValidationError("Password must contain at least one lowercase letter.")
+
+        # Check for at least one special character
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+            raise ValidationError("Password must contain at least one special character.")
+
+    def get_help_text(self):
+        return "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character."
+
 
 class LoginForm(forms.Form):
 
@@ -31,7 +54,7 @@ class LoginForm(forms.Form):
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
-    orcid_number = forms.CharField(max_length=2000)
+    orcid_number = forms.CharField(max_length=2000, required=False)
 
     class Meta:
         model = User

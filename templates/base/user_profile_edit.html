@@ -302,7 +302,7 @@ function generateRandom16DigitNumber() {
 
 
         specialties.forEach(element => {
-            let name = element.getAttribute('data-item-name');
+            // let name = element.getAttribute('data-item-name');
             let inputText = element.getAttribute('data-item-input-inner-text');
             let textareaText = element.getAttribute('data-item-textarea-inner-text');
             addBtnClicked(null, short_name, inputText, textareaText)
@@ -381,12 +381,38 @@ function generateRandom16DigitNumber() {
     }
 
     function createPacker(formDiv, formDivDesc, formIndex, name, inputinnerText, textareaInnerText) {
+
+        if (name === "Specialty"){
+
+        formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `Domain`, inputinnerText);
+
+        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Field`, `20px`, textareaInnerText, "yes");
+
+    }
+    
+    
+    else if (name === "Education"){
+    formDiv.innerHTML = createDropdownWithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, ["Mr", "Ms", "Dr", "Prof"],  `Title`, inputinnerText);
+
+    formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Degree`, `20px`, textareaInnerText, "yes");
+    }
+    else if (name === "Expertise"){
+    formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name}`, inputinnerText);
+
+    formDivDesc.innerHTML = ""
+    }
+    
+    
+    else{
         formDiv.innerHTML = createInputwithLabel(`${name.replace(/\s+/g, '').toLowerCase()}${formIndex}`, `form-control my-2`, `${name}`, inputinnerText);
 
-        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`, textareaInnerText);
+        formDivDesc.innerHTML = createTextAreawithLabel(`${name.replace(/\s+/g, '').toLowerCase()}desc_${formIndex}`, `form-control my-2`, `Short Description`, `200px`, textareaInnerText, null);
     }
 
-    function createTextAreawithLabel(id, className, placeholder, height, innerText) {
+
+    }
+
+    function createTextAreawithLabel(id, className, placeholder, height, innerText, resize=null) {
         var form = document.createElement("div")
         form.className = "form-floating mb-3"
         var label = document.createElement("label")
@@ -397,15 +423,19 @@ function generateRandom16DigitNumber() {
         textarea.id = id;
         textarea.name = id;
         textarea.className = "form-control my-2";
-        textarea.style.height = "200px";
+        textarea.style.height = height;
         textarea.placeholder = "Short Description";
         textarea.value = "Initial value for the textarea";
+        if (resize){
+            textarea.style.resize = "none"
+        }
         innerText && (textarea.innerText = innerText)
 
         form.appendChild(textarea);
         form.appendChild(label);
         return form.innerHTML;
     }
+    
     function createInputwithLabel(id, className, placeholder, innerText) {
         var form = document.createElement("div")
         form.className = "form-floating mb-3"
@@ -424,6 +454,38 @@ function generateRandom16DigitNumber() {
         form.appendChild(label);
         return form.innerHTML;
     }
+
+
+    function createDropdownWithLabel(id, className, options, placeholder, selectedOption) {
+    var form = document.createElement("div");
+    form.className = "form-floating mb-3";
+
+    var label = document.createElement("label");
+    label.setAttribute('for', id);
+    label.innerText = placeholder;
+
+    var select = document.createElement("select");
+    select.id = id;
+    select.name = id;
+    select.className = "form-control my-2";
+
+    // Creating options for the dropdown
+    options.forEach(optionText => {
+        var option = document.createElement("option");
+        option.text = option.value = optionText;
+        if (optionText === selectedOption) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+
+    form.appendChild(select);
+    form.appendChild(label);
+
+    return form.innerHTML;
+}
+
+
 
     function addBtnClicked(ele, what, inputinnerText, textareaInnerText) {
         if (ele === null) {
