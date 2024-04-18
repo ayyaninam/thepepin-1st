@@ -6,28 +6,28 @@
 
 <span class="fw-bold fs-2 ariel">{{all_articles|length}} Article(s)</span>
 <div class="all_filters mt-3 d-flex justify-content-center flex-wrap align-items-center">
-    <div class="left_filters mx-4">
+    <div class="text-center left_filters mx-sm-4">
 
         <a class="btn active rounded-pill my-2 " href="{% url 'homepage_view' %}?sort=recent">Most Recent</a>
 
         <a class="btn active rounded-pill my-2 " href="{% url 'homepage_view' %}?sort=viewed">Most viewed</a>
     </div>
-    <form class="mx-4 my-2  d-flex justify-content-center align-items-center " method="GET" action="{% url 'homepage_view' %}" >
+    <form class="text-center mx-sm-4 my-sm-2  d-flex justify-content-center align-items-center " method="GET" action="{% url 'homepage_view' %}" >
     <input name="sort" type="text" class="rounded-start-pill border-end-0 border-dark">
     <button type="submit" class="btn btn-sm rounded-end-pill btn-dark">Search</button>
 </form>
-<div class="other__links mx-4">
+<div class="other__links mx-sm-4 text-center">
     <a class=" my-2 btn active rounded-pill" href="{% url 'searcher' %}?sort=viewed">Searcher at the one</a>
     <a class=" my-2 btn active rounded-pill" href="{% url 'events' %}?sort=viewed">Research Events</a>
 </div>
 </div>
 
 
-<div class="d-flex main_hp__block">
+<div class="d-flex flex-wrap main_hp__block">
 {% if all_videos %}
   
-<div class="all_videos ">
-    <h2>Latest Video</h2>
+<div class="all_videos my-5">
+    <h2 class="fw-bold mb-3">Latest Video</h2>
     <div class="min_all_videos">
         {% for post in all_videos %}
 
@@ -88,8 +88,8 @@
 
 {% if all_events %}
   
-<div class="all_events ">
-    <h2>Latest Events</h2>
+<div class="all_events my-5">
+    <h2 class="fw-bold mb-3">Latest Events</h2>
     
     <div class="min_all_events">
         {% for post in all_events %}

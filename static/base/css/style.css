@@ -389,6 +389,7 @@ nav .logo_image{
 }
 
 
+
 .invalid-feedback{
     display: block !important;
 }
@@ -565,6 +566,14 @@ input[type="color"]:focus,
     box-shadow: inset 0 0 0 100vmax var(--_c);
     color: #fff;
   }
-
+  @media only screen and (max-width: 400px){
+  nav .logo_image{
+    width: 7rem;
+  }
+  .main_hp__block{flex-direction: column;}
+  .main_hp__block .all_videos{order:1}
+  .main_hp__block .all_articles_container{order:3}
+  .main_hp__block .all_events{order:2}
+}
 
   
